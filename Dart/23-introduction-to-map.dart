@@ -1,4 +1,4 @@
-// Maps son una coleccion de datos usada principalmente para representar datos
+// "Maps" son una colección de datos usada principalmente para representar datos
 // en formato JSON
 
 void main() {

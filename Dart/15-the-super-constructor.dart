@@ -18,9 +18,10 @@ class Person {
 }
 
 class Employee extends Person {
-  /*  Para acceder a las varaibles de la clase padre Person, estas deben ser 
-      requeridas en el constructor de la subclase, posteriormente, hay que invocar
-      al método super() y pasar dichos parámetros.
+  /*  
+    Para acceder a las variables de la clase padre Person, estas deben ser 
+    requeridas en el constructor de la subclase, posteriormente, hay que invocar
+    al método super() y pasar dichos parámetros.
   */
   Employee(
       {String name = "",

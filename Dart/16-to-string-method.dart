@@ -5,15 +5,15 @@ void main() {
   print(employee.toString());
 }
 
-class Person {
-  Person({this.name = "", this.age = 0, this.height = 0.0});
+class sobrescribe {
+  sobrescribe({this.name = "", this.age = 0, this.height = 0.0});
 
   final String name;
   final int age;
   final double height;
 
-  // Este metodo sobreescribe el metodo toString() de la superclase Object, por
-  // ende hay que usar la anotacion @override
+  // Este método sobrescribe el método toString() de la superclase Object, por
+  // ende, hay que usar la anotación @override
   @override
   String toString() => 'name: $name, age: $age, height: $height';
 
@@ -23,7 +23,7 @@ class Person {
   void sayName() => print("Hello, I'm $name");
 }
 
-class Employee extends Person {
+class Employee extends sobrescribe {
   Employee(
       {String name = "",
       int age = 0,
@@ -40,5 +40,5 @@ class Employee extends Person {
       "${super.toString()}, taxCode: $taxCode, salary: $salary";
 }
 
-// RECOMENDACION: Al hacer un proceso de debug, podemos hacer uso del metodo 
+// RECOMENDACIÓN: Al hacer un proceso de debug, podemos hacer uso del método
 // toString() para ver lo que retorna nuestra clase.

@@ -1,6 +1,7 @@
-/*  La Herencia es la relación que existe entre una clase base o "clase padre"
-    y una clase que drive de esta, llamada "subclase" y que hereda las variables
-    y métodos de la primera.
+/*  
+  La Herencia es la relación que existe entre una clase base o "clase padre"
+  y una clase que derive de esta, llamada "subclase" y que hereda las variables
+  y métodos de la primera.
 */
 
 void main() {

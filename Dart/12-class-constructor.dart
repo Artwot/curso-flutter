@@ -6,8 +6,9 @@ void main() {
 }
 
 class Person {
-  /*  Si las variables declaradas no son inicializadas, se debe crear el método
-      constructor 
+  /*  
+    Si las variables declaradas no son inicializadas, se debe crear el método
+    constructor.
   */
   Person({this.name = "", this.age = 0, this.height = 0.0});
   String name;

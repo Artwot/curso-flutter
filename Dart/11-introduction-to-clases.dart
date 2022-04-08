@@ -1,11 +1,13 @@
-/*  Clase: Una clase es un modelo personalizado que contiene variables y 
+/*  
+    Clase: Una clase es un modelo personalizado que contiene variables y 
     funciones con un comportamiento particular, el cual es dado por la lógica de
     la clase.
 */
 
 void main() {
-  /*  Crear una instancia de la clase Person. Una instancia de una clase es 
-      básicamente la creación de un objeto derivado de una clase.
+  /*  
+    Crear una instancia de la clase Person. Una instancia de una clase es 
+    básicamente la creación de un objeto derivado de la misma.
   */
   final person = Person();
 }

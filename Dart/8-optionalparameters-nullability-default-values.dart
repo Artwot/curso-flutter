@@ -3,8 +3,10 @@ void main() {
   var age = 22;
   var height = 1.75;
 
-  final person1 = describe(name,
-      age); // Se puede omitir el parámetro "height" al ser un parámetro opcional.
+  final person1 = describe(
+    name,
+    age,
+  ); // Se puede omitir el parámetro "height" al ser un parámetro opcional.
   final person2 = describe("Leonardo da Vinci", 27, 1.83);
 
   print(person1);
