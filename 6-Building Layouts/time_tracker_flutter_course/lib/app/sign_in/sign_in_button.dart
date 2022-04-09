@@ -7,7 +7,7 @@ class SignInButton extends CustomRaisedButton {
     Color color,
     Color textColor,
     VoidCallback onPressed,
-    // assert detiene la ejecución si una condición boleana es falsa
+    // assert detiene la ejecución si una condición de tipo boleana es falsa
   })  : assert(text != null),
         super(
           child: Text(

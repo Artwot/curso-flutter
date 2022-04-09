@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 
 /* 
-  1. Agegar Propiedades
+  1. Agregar Propiedades
   2. Agregar un Constructor
   3. Usar Propiedades
 
@@ -17,7 +17,7 @@ class CustomRaisedButton extends StatelessWidget {
     this.borderRadius: 16.0,
     this.height: 50.0,
     this.onPressed,
-    // assertions son muy útiles al momento de verifica errores de programación
+    // Los assertions son muy útiles al momento de verificar errores de programación
     // durante el runtime, es preferible usarlos solo en modo debug
   }) : assert(borderRadius != null);
   final Widget child;
@@ -34,8 +34,9 @@ class CustomRaisedButton extends StatelessWidget {
         child: child,
         color: color,
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(borderRadius))),
-        onPressed: onPressed, // onPressed es opcional
+          borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
+        ),
+        onPressed: onPressed, // la propiedad 'onPressed' es opcional
       ),
     );
   }

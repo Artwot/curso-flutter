@@ -22,17 +22,20 @@ class SignInPage extends StatelessWidget {
   Widget _buildContent() {
     return Container(
       padding: EdgeInsets.all(16.0),
-      // Un child puede tener un Widget dentro de el
+      // Un child puede tener un Widget dentro de sí mismo.
       child: Column(
-        // Para distribuir el contenido a lo largo
+        // Para distribuir el contenido a lo largo del contenedor
         mainAxisAlignment: MainAxisAlignment.center,
-        // Para ocupar todo el ancho
+        // Para ocupar todo el ancho del contenedor
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Text(
             'Sign in',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 32.0,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           SizedBox(height: 48.0),
           SocialSignInButton(
@@ -60,7 +63,10 @@ class SignInPage extends StatelessWidget {
           SizedBox(height: 8.0),
           Text(
             'or',
-            style: TextStyle(fontSize: 14.0, color: Colors.black87),
+            style: TextStyle(
+              fontSize: 14.0,
+              color: Colors.black87,
+            ),
             textAlign: TextAlign.center,
           ),
           SizedBox(

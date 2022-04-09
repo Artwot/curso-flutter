@@ -17,11 +17,16 @@ class SocialSignInButton extends CustomRaisedButton {
               Image.asset(assetName),
               Text(
                 text,
-                style: TextStyle(color: textColor, fontSize: 15.0),
+                style: TextStyle(
+                  color: textColor,
+                  fontSize: 15.0,
+                ),
               ),
-              // Hack para centar dos elementos con un widget con opacidad nula
+              // Hack para centrar dos elementos con un widget con opacidad nula
               Opacity(
-                  opacity: 0.0, child: Image.asset('images/google-logo.png')),
+                opacity: 0.0,
+                child: Image.asset('images/google-logo.png'),
+              ),
             ],
           ),
           color: color,
