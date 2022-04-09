@@ -5,8 +5,8 @@ void main() {
   print(employee.toString());
 }
 
-class sobrescribe {
-  sobrescribe({this.name = "", this.age = 0, this.height = 0.0});
+class Person {
+  Person({this.name = "", this.age = 0, this.height = 0.0});
 
   final String name;
   final int age;
@@ -23,7 +23,7 @@ class sobrescribe {
   void sayName() => print("Hello, I'm $name");
 }
 
-class Employee extends sobrescribe {
+class Employee extends Person {
   Employee(
       {String name = "",
       int age = 0,
