@@ -1,7 +1,7 @@
 /*  
-    Clase: Una clase es un modelo personalizado que contiene variables y 
-    funciones con un comportamiento particular, el cual es dado por la lógica de
-    la clase.
+  Clase: Una clase es un modelo personalizado que contiene variables y 
+  funciones con un comportamiento particular, el cual es dado por la lógica de
+  la clase.
 */
 
 void main() {
