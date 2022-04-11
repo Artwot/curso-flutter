@@ -1,4 +1,4 @@
-// Los mixins extraen y reutilizan funcionalidad en multiples clases
+// Los mixin extraen y reutilizan una funcionalidad en multiples clases
 
 // Mixin extiende la funcionalidad de clases existentes
 mixin BMI {

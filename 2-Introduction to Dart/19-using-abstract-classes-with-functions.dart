@@ -1,6 +1,6 @@
 /*  
   Las clases abstractas nos ayudan a programar las interfaces, no las 
-  implementaciones
+  implementaciones.
 */
 
 import 'dart:math';

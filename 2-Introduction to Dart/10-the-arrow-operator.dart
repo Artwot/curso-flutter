@@ -16,12 +16,13 @@ String describe({String name = "", int age = 0, double height = 0.0}) {
   return "Hello, I'm $name. I'm $age years old. I'm $height meters tall";
 }
 
-/*  El operador flecha o arrow operator es conocido como azúcar sintáctica, el 
-    cual nos permite escribir código más conciso y limpio.
+/*  
+  El operador flecha o arrow operator es conocido como azúcar sintáctica, el 
+  cual nos permite escribir código más conciso y limpio.
 
-    En la función describe2() se eliminan las llaves {}, se agregar el operador 
-    flecha => y se elimina la palabra "return", pues el retorno del valor ya 
-    está implícito.
+  En la función describe2() se eliminan las llaves {}, se agrega el operador 
+  flecha => y se elimina la palabra "return", pues el retorno del valor ya 
+  está implícito.
 */
 String describe2({String name = "", int age = 0, double height = 0.0}) =>
     "Hello, I'm $name. I'm $age years old. I'm $height meters tall";

@@ -1,5 +1,7 @@
-// Son una caract. de Dart en la que las propiedades cuyo valor es procesado
-// en el store: utilizan getters y setters
+/*
+  Son una característica de Dart en la que el valor de las propiedades es 
+  procesado en el store: utilizan getters y setters.
+*/
 
 import 'dart:math';
 

@@ -1,7 +1,8 @@
 void main() {
   final person = Person(name: "Jorge", age: 22, height: 1.75);
-  /*  Se puede acceder a los métodos de una clase a través del objeto. Un método
-      hace referencia a una función dentro de una clase, por ende, son lo mismo
+  /*  
+    Se puede acceder a los métodos de una clase a través del objeto. Un método
+    hace referencia a una función dentro de una clase, por ende, son lo mismo.
   */
   print(person.describe());
 }
