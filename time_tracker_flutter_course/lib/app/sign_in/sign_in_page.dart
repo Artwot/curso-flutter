@@ -12,7 +12,7 @@ class SignInPage extends StatelessWidget {
     */
     // Retorna un Future<UserCredencial>
     final userCredentials = await FirebaseAuth.instance.signInAnonymously();
-    print('${userCredentials.user.uid}');
+    print('${userCredentials.user?.uid}');
   }
 
   @override
@@ -68,7 +68,7 @@ class SignInPage extends StatelessWidget {
           SignInButton(
             text: 'Sign in with email',
             textColor: Colors.white,
-            color: Colors.teal[700],
+            color: (Colors.teal[700])!,
             onPressed: () {},
           ),
           SizedBox(height: 8.0),
@@ -86,7 +86,7 @@ class SignInPage extends StatelessWidget {
           SignInButton(
             text: 'Go anonymous',
             textColor: Colors.black,
-            color: Colors.lime[300],
+            color: (Colors.lime[300])!,
             // 'onPressed' es un callback, y no es necesario agregar (), pues no toma argumentos
             onPressed: _signInAnonymously,
           ),
