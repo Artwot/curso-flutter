@@ -7,13 +7,8 @@ import '../services/auth.dart';
 
 class SignInPage extends StatelessWidget {
   // Guardar el usuario como una variable de estado
-  const SignInPage({
-    Key? key,
-    required this.auth,
-    required this.onSignIn,
-  }) : super(key: key); // Constructor
+  const SignInPage({Key? key, required this.auth}) : super(key: key);
   final AuthBase auth;
-  final void Function(User) onSignIn;
 
   Future<void> _signInAnonymously() async {
     /*
@@ -23,8 +18,7 @@ class SignInPage extends StatelessWidget {
     */
     // Retorna un Future<UserCredencial>
     try {
-      final user = await auth.signInAnonymously();
-      onSignIn(user!);
+      await auth.signInAnonymously();
     } catch (e) {
       print(e.toString());
     }
