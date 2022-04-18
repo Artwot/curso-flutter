@@ -11,48 +11,33 @@ import 'home_page.dart';
   LandingPage controla el state de Auth
 */
 
-class LandingPage extends StatefulWidget {
+class LandingPage extends StatelessWidget {
   const LandingPage({Key? key, required this.auth}) : super(key: key);
   final AuthBase auth;
 
   @override
-  State<LandingPage> createState() => _LandingPageState();
-}
-
-class _LandingPageState extends State<LandingPage> {
-  User? _user;
-
-  // Para recuperar el usuario actual cuando la aplicación inicia se
-  // implementa el método initState() para almacenar la sesión como
-  // variable de estado al iniciar la app
-  @override
-  void initState() {
-    super.initState();
-    // Como 'auth' es declarado en la clase LandingPage, es necesario anteponer
-    // 'widget.' para que reconozca la variable.
-    _updateUser(widget.auth.currentUser);
-  }
-
-  void _updateUser(User? user) {
-    setState(() {
-      _user = user;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    // Si el usuario no inició sesión, dirigirlo a SignInPage
-    if (_user == null) {
-      return SignInPage(
-        auth: widget.auth,
-        // Se envía el usuario
-        onSignIn: _updateUser,
-      );
-    }
-    return HomePage(
-      auth: widget.auth,
-      // Se asigna un 'null' ya que no retorna un valor al finalizar sesión
-      onSignOut: () => _updateUser(null),
-    );
+    return StreamBuilder<User?>(
+        stream: auth.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.active) {
+            final User? user = snapshot.data;
+            // Si el usuario no inició sesión, dirigirlo a SignInPage
+            if (user == null) {
+              return SignInPage(
+                auth: auth,
+              );
+            }
+            return HomePage(
+              auth: auth,
+            );
+          }
+          return Scaffold(
+            body: Center(
+              // Muestra un indicador de progreso durante la carga de datos
+              child: CircularProgressIndicator(),
+            ),
+          );
+        });
   }
 }
