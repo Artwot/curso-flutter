@@ -5,11 +5,11 @@ class SocialSignInButton extends CustomRaisedButton {
   SocialSignInButton({
     // Le indica al compilador que el parámetro assetName es requerido
     // @required especifica una propiedad que debe ser incluida
-    @required String assetName,
-    @required String text,
-    Color color,
-    Color textColor,
-    VoidCallback onPressed,
+    required String assetName,
+    required String text,
+    required Color color,
+    required textColor,
+    required VoidCallback onPressed,
   }) : super(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

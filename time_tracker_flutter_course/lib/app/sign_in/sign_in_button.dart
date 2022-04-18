@@ -1,15 +1,13 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:time_tracker_flutter_course/common_widgets/custom_raised_button.dart';
 
 class SignInButton extends CustomRaisedButton {
   SignInButton({
-    @required String text,
-    Color color,
-    Color textColor,
-    VoidCallback onPressed,
-    // assert detiene la ejecución si una condición de tipo booleana es falsa
-  })  : assert(text != null),
-        super(
+    required String text,
+    required Color color,
+    required Color textColor,
+    required VoidCallback onPressed,
+  }) : super(
           child: Text(
             text,
             style: TextStyle(
