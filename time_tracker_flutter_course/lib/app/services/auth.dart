@@ -62,6 +62,10 @@ class Auth implements AuthBase {
   // Cerrar sesión
   @override
   Future<void> signOut() async {
+    // Para cerrar sesión en la cuenta de Google y en Firebase
+    final googleSignIn = GoogleSignIn();
+    await googleSignIn.signOut();
+
     await _firebaseAuth.signOut();
   }
 }
