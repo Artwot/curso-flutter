@@ -3,7 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:time_tracker_flutter_course/app/sign_in/sign_in_button.dart';
 import 'package:time_tracker_flutter_course/app/sign_in/social_sign_in_button.dart';
 
+import '../services/auth.dart';
+
 class SignInPage extends StatelessWidget {
+  // Guardar el usuario como una variable de estado
+  const SignInPage({
+    Key? key,
+    required this.auth,
+    required this.onSignIn,
+  }) : super(key: key); // Constructor
+  final AuthBase auth;
+  final void Function(User) onSignIn;
+
   Future<void> _signInAnonymously() async {
     /*
       Usamos el patrón de diseño Singleton, el cual es usado en POO con la 
@@ -11,8 +22,12 @@ class SignInPage extends StatelessWidget {
       acceso global a los recursos
     */
     // Retorna un Future<UserCredencial>
-    final userCredentials = await FirebaseAuth.instance.signInAnonymously();
-    print('${userCredentials.user?.uid}');
+    try {
+      final user = await auth.signInAnonymously();
+      onSignIn(user!);
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   @override
