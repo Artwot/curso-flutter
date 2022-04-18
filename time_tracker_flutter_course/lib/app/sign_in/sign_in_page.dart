@@ -23,6 +23,14 @@ class SignInPage extends StatelessWidget {
     }
   }
 
+  Future<void> _signInWithGoogle() async {
+    try {
+      await auth.signInWithGoogle();
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,14 +65,16 @@ class SignInPage extends StatelessWidget {
             ),
           ),
           SizedBox(height: 48.0),
+          // Inicio de sesión con Google
           SocialSignInButton(
             assetName: 'images/google-logo.png',
             text: 'Sign in with Google',
             textColor: Colors.black87,
             color: Colors.white,
-            onPressed: () {},
+            onPressed: _signInWithGoogle,
           ),
           SizedBox(height: 8.0),
+          // Inicio de sesión con Facebook
           SocialSignInButton(
             assetName: 'images/facebook-logo.png',
             text: 'Sign in with Facebook',
@@ -73,6 +83,7 @@ class SignInPage extends StatelessWidget {
             onPressed: () {},
           ),
           SizedBox(height: 8.0),
+          // Inicio de sesión con Email
           SignInButton(
             text: 'Sign in with email',
             textColor: Colors.white,
@@ -91,6 +102,7 @@ class SignInPage extends StatelessWidget {
           SizedBox(
             height: 8.0,
           ),
+          // Inicio de sesión de forma Anónima
           SignInButton(
             text: 'Go anonymous',
             textColor: Colors.black,
