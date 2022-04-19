@@ -1,13 +1,80 @@
 import 'package:flutter/material.dart';
+import 'package:time_tracker_flutter_course/app/services/auth.dart';
+import 'package:time_tracker_flutter_course/common_widgets/form_submit_button.dart';
 
-class EmailSignInForm extends StatelessWidget {
+enum EmailSignInFormType { signIn, register }
+
+class EmailSignInForm extends StatefulWidget {
+  EmailSignInForm({required this.auth});
+  final AuthBase auth;
+
+  @override
+  State<EmailSignInForm> createState() => _EmailSignInFormState();
+}
+
+class _EmailSignInFormState extends State<EmailSignInForm> {
+  // Crear controllers para los campos de texto
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final FocusNode _emailFocusNode = FocusNode();
+  final FocusNode _passwordFocusNode = FocusNode();
+
+  EmailSignInFormType _formType = EmailSignInFormType.signIn;
+
+  String get _email => _emailController.text;
+  String get _password => _passwordController.text;
+
+  void _submit() async {
+    // Condición para iniciar sesión o crear usuario
+    try {
+      if (_formType == EmailSignInFormType.signIn) {
+        await widget.auth.signInWithEmailAndPassword(_email, _password);
+      } else {
+        await widget.auth.createUserWithEmailAndPassword(_email, _password);
+      }
+      Navigator.of(context).pop();
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  void _emailEditingComplete() {
+    // Se traslada al siguiente campo del formulario
+    FocusScope.of(context).requestFocus(_passwordFocusNode);
+  }
+
+  // Intercambiar entre los textos mostrados
+  void _toggleFormType() {
+    setState(() {
+      _formType = _formType == EmailSignInFormType.signIn
+          ? EmailSignInFormType.register
+          : EmailSignInFormType.signIn;
+    });
+    _emailController.clear();
+    _passwordController.clear();
+  }
+
   List<Widget> _buildChildren() {
+    // Seleccionar el tipo de texto
+    final primaryText = _formType == EmailSignInFormType.signIn
+        ? 'Sign in'
+        : 'Create an account';
+    final secondaryText = _formType == EmailSignInFormType.signIn
+        ? 'Need an account? Register'
+        : 'Have an account? Sign in';
+
+    bool submitEnabled = _email.isNotEmpty && _password.isNotEmpty;
+
     return [
-      TextField(
-        decoration: InputDecoration(
-          labelText: 'Email',
-          hintText: 'test@test.com',
-        ),
+      // Campo Email
+      _buildEmailTextField(),
+      SizedBox(height: 8.0),
+      // Campo Password
+      _buildPasswordTextField(),
+      SizedBox(height: 8.0),
+      FormSubmitButton(
+        text: primaryText,
+        onPressed: submitEnabled ? _submit : null,
       ),
       TextField(
         decoration: InputDecoration(
@@ -15,7 +82,42 @@ class EmailSignInForm extends StatelessWidget {
         ),
         obscureText: true,
       ),
+      SizedBox(height: 8.0),
+      TextButton(
+        child: Text(secondaryText),
+        onPressed: _toggleFormType,
+      )
     ];
+  }
+
+  TextField _buildPasswordTextField() {
+    return TextField(
+      controller: _passwordController,
+      focusNode: _passwordFocusNode,
+      decoration: InputDecoration(
+        labelText: 'Password',
+      ),
+      obscureText: true,
+      onChanged: (password) => _updateState(),
+      textInputAction: TextInputAction.done,
+    );
+  }
+
+  TextField _buildEmailTextField() {
+    return TextField(
+      controller: _emailController,
+      focusNode: _emailFocusNode,
+      decoration: InputDecoration(
+        labelText: 'Email',
+        hintText: 'test@test.com',
+      ),
+      // Quitar sugerencias en el teclado
+      autocorrect: false,
+      keyboardType: TextInputType.emailAddress,
+      textInputAction: TextInputAction.next,
+      onChanged: (email) => _updateState(),
+      onEditingComplete: _emailEditingComplete,
+    );
   }
 
   @override
@@ -23,10 +125,18 @@ class EmailSignInForm extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
+        // Hace que los widgets ocupen todo el espacio del contenedor
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         // Especifica cuánto espacio ocupa este Widget en el eje principal
         mainAxisSize: MainAxisSize.min,
         children: _buildChildren(),
       ),
     );
+  }
+
+  _updateState() {
+    print("email is $_email, password is $_password");
+    // Solo llamamos a setState() para actualizar el estado
+    setState(() {});
   }
 }

@@ -50,7 +50,7 @@ class SignInPage extends StatelessWidget {
       // Crear una nueva ruta
       MaterialPageRoute<void>(
         fullscreenDialog: true,
-        builder: (context) => EmailSignInPage(),
+        builder: (context) => EmailSignInPage(auth: auth),
       ),
     );
   }
