@@ -53,8 +53,12 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   }
 
   void _emailEditingComplete() {
+    // Si el campo de email es invalido, no permite cambiar el focus del campo.
+    final newFocus = widget.emailValidator.isValid(_email)
+        ? _passwordFocusNode
+        : _emailFocusNode;
     // Se traslada al siguiente campo del formulario
-    FocusScope.of(context).requestFocus(_passwordFocusNode);
+    FocusScope.of(context).requestFocus(newFocus);
   }
 
   // Intercambiar entre los textos mostrados
