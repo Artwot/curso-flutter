@@ -44,6 +44,20 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       Navigator.of(context).pop();
     } catch (e) {
       print(e.toString());
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text("Sign in failed"),
+              content: Text(e.toString()),
+              actions: [
+                TextButton(
+                  child: Text('Ok'),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ],
+            );
+          });
     } finally {
       // finally se ejecuta en todos los casos: si se ejecuta o falla la instrucción
       setState(() {
