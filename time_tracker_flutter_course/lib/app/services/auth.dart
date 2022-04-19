@@ -9,6 +9,8 @@ abstract class AuthBase {
   Future<User?> signInWithGoogle();
   Future<User?> signInWithFacebook();
   Future<void> signOut();
+  Future<User?> signInWithEmailAndPassword(String email, String password);
+  Future<User?> createUserWithEmailAndPassword(String email, String password);
 }
 
 // Dependency Injection
@@ -86,6 +88,34 @@ class Auth implements AuthBase {
       default:
         throw UnimplementedError();
     }
+  }
+
+  // Inicio de sesión con Email & password
+  @override
+  Future<User?> signInWithEmailAndPassword(
+    String email,
+    String password,
+  ) async {
+    final userCredential = await _firebaseAuth.signInWithCredential(
+      EmailAuthProvider.credential(
+        email: email,
+        password: password,
+      ),
+    );
+    return userCredential.user;
+  }
+
+  // Crear cuenta con email & password
+  @override
+  Future<User?> createUserWithEmailAndPassword(
+    String email,
+    String password,
+  ) async {
+    final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    return userCredential.user;
   }
 
   // Cerrar sesión
