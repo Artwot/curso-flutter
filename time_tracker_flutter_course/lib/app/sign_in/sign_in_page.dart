@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:time_tracker_flutter_course/app/sign_in/sign_in_button.dart';
+import 'package:time_tracker_flutter_course/app/sign_in/email_sign_in_page.dart';
 import 'package:time_tracker_flutter_course/app/sign_in/social_sign_in_button.dart';
-
 import '../services/auth.dart';
 
 class SignInPage extends StatelessWidget {
@@ -9,6 +9,7 @@ class SignInPage extends StatelessWidget {
   const SignInPage({Key? key, required this.auth}) : super(key: key);
   final AuthBase auth;
 
+  // Inicio de sesión de forma anónima
   Future<void> _signInAnonymously() async {
     /*
       Usamos el patrón de diseño Singleton, el cual es usado en POO con la 
@@ -23,6 +24,7 @@ class SignInPage extends StatelessWidget {
     }
   }
 
+  // Inicio de sesión con Google
   Future<void> _signInWithGoogle() async {
     try {
       await auth.signInWithGoogle();
@@ -31,12 +33,26 @@ class SignInPage extends StatelessWidget {
     }
   }
 
+  // Inicio de sesión con Facebook
   Future<void> _signInWithFacebook() async {
     try {
       await auth.signInWithFacebook();
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  // Inicio de sesión con Email
+  void _signInWithEmail(BuildContext context) {
+    // Para navegar entre Widgets hacemos uso del widget Navigator, el cual funciona
+    // como una pila, con los métodos push y pop.
+    Navigator.of(context).push(
+      // Crear una nueva ruta
+      MaterialPageRoute<void>(
+        fullscreenDialog: true,
+        builder: (context) => EmailSignInPage(),
+      ),
+    );
   }
 
   @override
@@ -46,7 +62,7 @@ class SignInPage extends StatelessWidget {
         title: Text('Time Tracker'),
         elevation: 4.0,
       ),
-      body: _buildContent(),
+      body: _buildContent(context),
       backgroundColor: Colors.grey[200],
     );
   }
@@ -54,7 +70,7 @@ class SignInPage extends StatelessWidget {
 // Se retorna un Widget, ya que Container hereda de Widget, así que no hay inconveniente.
 // Para hacer MÉTODOS PRIVADOS se debe anteponer "_" al nombre del método, los
 // cuales solo son accesibles dentro de la clase que lo contiene
-  Widget _buildContent() {
+  Widget _buildContent(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(16.0),
       // Un child puede tener un Widget dentro de sí mismo.
@@ -96,7 +112,7 @@ class SignInPage extends StatelessWidget {
             text: 'Sign in with email',
             textColor: Colors.white,
             color: (Colors.teal[700])!,
-            onPressed: () {},
+            onPressed: () => _signInWithEmail(context),
           ),
           SizedBox(height: 8.0),
           Text(
