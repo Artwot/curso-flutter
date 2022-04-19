@@ -22,10 +22,16 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
 
   EmailSignInFormType _formType = EmailSignInFormType.signIn;
 
+  // Obtener los controllers de los campos del formulario
   String get _email => _emailController.text;
   String get _password => _passwordController.text;
 
+  bool _submitted = false;
+
   void _submit() async {
+    setState(() {
+      _submitted = true;
+    });
     // Condición para iniciar sesión o crear usuario
     try {
       if (_formType == EmailSignInFormType.signIn) {
@@ -47,6 +53,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   // Intercambiar entre los textos mostrados
   void _toggleFormType() {
     setState(() {
+      _submitted = false;
       _formType = _formType == EmailSignInFormType.signIn
           ? EmailSignInFormType.register
           : EmailSignInFormType.signIn;
@@ -94,13 +101,14 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   }
 
   TextField _buildPasswordTextField() {
-    bool passwordValid = widget.passwordValidator.isValid(_password);
+    bool showErrorText =
+        _submitted && !widget.passwordValidator.isValid(_password);
     return TextField(
       controller: _passwordController,
       focusNode: _passwordFocusNode,
       decoration: InputDecoration(
         labelText: 'Password',
-        errorText: passwordValid ? null : widget.invalidPasswordErrorText,
+        errorText: showErrorText ? widget.invalidPasswordErrorText : null,
       ),
       obscureText: true,
       onChanged: (password) => _updateState(),
@@ -109,14 +117,15 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   }
 
   TextField _buildEmailTextField() {
-    bool emailValid = widget.emailValidator.isValid(_email);
+    bool showErrorText =
+        _submitted && !widget.passwordValidator.isValid(_email);
     return TextField(
       controller: _emailController,
       focusNode: _emailFocusNode,
       decoration: InputDecoration(
         labelText: 'Email',
         hintText: 'test@test.com',
-        errorText: emailValid ? null : widget.invalidEmailErrorText,
+        errorText: showErrorText ? widget.invalidPasswordErrorText : null,
       ),
       // Quitar sugerencias en el teclado
       autocorrect: false,
