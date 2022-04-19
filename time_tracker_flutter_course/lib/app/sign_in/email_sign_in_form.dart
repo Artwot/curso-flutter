@@ -98,12 +98,6 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         text: primaryText,
         onPressed: submitEnabled ? _submit : null,
       ),
-      TextField(
-        decoration: InputDecoration(
-          labelText: 'Password',
-        ),
-        obscureText: true,
-      ),
       SizedBox(height: 8.0),
       TextButton(
         child: Text(secondaryText),
