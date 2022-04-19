@@ -3,6 +3,8 @@ import 'package:time_tracker_flutter_course/app/services/auth.dart';
 import 'package:time_tracker_flutter_course/app/sign_in/validators.dart';
 import 'package:time_tracker_flutter_course/common_widgets/form_submit_button.dart';
 
+import '../../common_widgets/show_alert_dialog.dart';
+
 enum EmailSignInFormType { signIn, register }
 
 class EmailSignInForm extends StatefulWidget with EmailAndPasswordValidator {
@@ -43,21 +45,11 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       }
       Navigator.of(context).pop();
     } catch (e) {
-      print(e.toString());
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text("Sign in failed"),
-              content: Text(e.toString()),
-              actions: [
-                TextButton(
-                  child: Text('Ok'),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ],
-            );
-          });
+      // Personalizar los widgets Dialog para cada plataforma
+      showAlertDialog(context,
+          title: 'Sign in failed',
+          content: e.toString(),
+          defaultActionText: 'Ok');
     } finally {
       // finally se ejecuta en todos los casos: si se ejecuta o falla la instrucción
       setState(() {
