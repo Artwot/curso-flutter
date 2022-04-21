@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../services/auth.dart';
 import 'sign_in_button.dart';
 import 'email_sign_in_page.dart';
 import 'social_sign_in_button.dart';
-import '../services/auth_provider.dart';
 
 class SignInPage extends StatelessWidget {
   // Inicio de sesión de forma anónima
@@ -14,8 +15,8 @@ class SignInPage extends StatelessWidget {
     */
     // Retorna un Future<UserCredencial>
     try {
-      final auth = AuthProvider.of(context);
-      await auth?.signInAnonymously();
+      final auth = Provider.of<AuthBase>(context, listen: false);
+      await auth.signInAnonymously();
     } catch (e) {
       print(e.toString());
     }
@@ -24,8 +25,8 @@ class SignInPage extends StatelessWidget {
   // Inicio de sesión con Google
   Future<void> _signInWithGoogle(BuildContext context) async {
     try {
-      final auth = AuthProvider.of(context);
-      await auth?.signInWithGoogle();
+      final auth = Provider.of<AuthBase>(context, listen: false);
+      await auth.signInWithGoogle();
     } catch (e) {
       print(e.toString());
     }
@@ -34,8 +35,8 @@ class SignInPage extends StatelessWidget {
   // Inicio de sesión con Facebook
   Future<void> _signInWithFacebook(BuildContext context) async {
     try {
-      final auth = AuthProvider.of(context);
-      await auth?.signInWithFacebook();
+      final auth = Provider.of<AuthBase>(context, listen: false);
+      await auth.signInWithFacebook();
     } catch (e) {
       print(e.toString());
     }

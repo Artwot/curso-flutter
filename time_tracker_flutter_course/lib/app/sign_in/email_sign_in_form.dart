@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../services/auth.dart';
 import '/app/sign_in/validators.dart';
 import '/common_widgets/form_submit_button.dart';
 import '../../common_widgets/show_alert_dialog.dart';
-import '../services/auth_provider.dart';
 
 enum EmailSignInFormType { signIn, register }
 
@@ -34,11 +35,11 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
     });
     // Condición para iniciar sesión o crear usuario
     try {
-      final auth = AuthProvider.of(context);
+      final auth = Provider.of<AuthBase>(context, listen: false);
       if (_formType == EmailSignInFormType.signIn) {
-        await auth?.signInWithEmailAndPassword(_email, _password);
+        await auth.signInWithEmailAndPassword(_email, _password);
       } else {
-        await auth?.createUserWithEmailAndPassword(_email, _password);
+        await auth.createUserWithEmailAndPassword(_email, _password);
       }
       Navigator.of(context).pop();
     } catch (e) {
