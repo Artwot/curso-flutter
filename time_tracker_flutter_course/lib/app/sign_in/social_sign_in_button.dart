@@ -9,7 +9,7 @@ class SocialSignInButton extends CustomRaisedButton {
     required String text,
     required Color color,
     required textColor,
-    required VoidCallback onPressed,
+    VoidCallback? onPressed,
   }) : super(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
