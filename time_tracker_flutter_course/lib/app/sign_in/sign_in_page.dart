@@ -74,6 +74,7 @@ class _SignInPageState extends State<SignInPage> {
 
   // Inicio de sesión con Email
   void _signInWithEmail(BuildContext context) {
+    print('Click here...');
     // Para navegar entre Widgets hacemos uso del widget Navigator, el cual funciona
     // como una pila, con los métodos push y pop.
     Navigator.of(context).push(
@@ -112,6 +113,7 @@ class _SignInPageState extends State<SignInPage> {
             height: 50.0,
             child: _buildHeader(),
           ),
+          SizedBox(height: 48.0),
           // Inicio de sesión con Google
           SocialSignInButton(
             assetName: 'images/google-logo.png',
@@ -135,8 +137,7 @@ class _SignInPageState extends State<SignInPage> {
             text: 'Sign in with email',
             textColor: Colors.white,
             color: (Colors.teal[700])!,
-            onPressed: () =>
-                _isLoading ? null : () => _signInWithEmail(context),
+            onPressed: _isLoading ? null : () => _signInWithEmail(context),
           ),
           SizedBox(height: 8.0),
           Text(
