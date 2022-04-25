@@ -1,11 +1,32 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../common_widgets/show_exception_alert_dialog.dart';
 import '../services/auth.dart';
 import 'sign_in_button.dart';
 import 'email_sign_in_page.dart';
 import 'social_sign_in_button.dart';
 
-class SignInPage extends StatelessWidget {
+class SignInPage extends StatefulWidget {
+  @override
+  State<SignInPage> createState() => _SignInPageState();
+}
+
+class _SignInPageState extends State<SignInPage> {
+  bool _isLoading = false;
+
+  void _showSignInError(BuildContext context, Exception exception) {
+    if (exception is FirebaseException &&
+        exception.code == 'ERROR_ABORTED_BY_USER') {
+      return;
+    }
+    showExceptionAlertDialog(
+      context,
+      title: 'Sign in failed',
+      exception: exception,
+    );
+  }
+
   // Inicio de sesión de forma anónima
   Future<void> _signInAnonymously(BuildContext context) async {
     /*
@@ -15,35 +36,45 @@ class SignInPage extends StatelessWidget {
     */
     // Retorna un Future<UserCredencial>
     try {
+      setState(() => _isLoading = true);
       final auth = Provider.of<AuthBase>(context, listen: false);
       await auth.signInAnonymously();
-    } catch (e) {
-      print(e.toString());
+    } on Exception catch (e) {
+      _showSignInError(context, e);
+    } finally {
+      setState(() => _isLoading = false);
     }
   }
 
   // Inicio de sesión con Google
   Future<void> _signInWithGoogle(BuildContext context) async {
     try {
+      setState(() => _isLoading = true);
       final auth = Provider.of<AuthBase>(context, listen: false);
       await auth.signInWithGoogle();
-    } catch (e) {
-      print(e.toString());
+    } on Exception catch (e) {
+      _showSignInError(context, e);
+    } finally {
+      setState(() => _isLoading = false);
     }
   }
 
   // Inicio de sesión con Facebook
   Future<void> _signInWithFacebook(BuildContext context) async {
     try {
+      setState(() => _isLoading = true);
       final auth = Provider.of<AuthBase>(context, listen: false);
       await auth.signInWithFacebook();
-    } catch (e) {
-      print(e.toString());
+    } on Exception catch (e) {
+      _showSignInError(context, e);
+    } finally {
+      setState(() => _isLoading = false);
     }
   }
 
   // Inicio de sesión con Email
   void _signInWithEmail(BuildContext context) {
+    print('Click here...');
     // Para navegar entre Widgets hacemos uso del widget Navigator, el cual funciona
     // como una pila, con los métodos push y pop.
     Navigator.of(context).push(
@@ -68,8 +99,6 @@ class SignInPage extends StatelessWidget {
   }
 
 // Se retorna un Widget, ya que Container hereda de Widget, así que no hay inconveniente.
-// Para hacer MÉTODOS PRIVADOS se debe anteponer "_" al nombre del método, los
-// cuales solo son accesibles dentro de la clase que lo contiene
   Widget _buildContent(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(16.0),
@@ -80,13 +109,9 @@ class SignInPage extends StatelessWidget {
         // Para ocupar todo el ancho del container.
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Text(
-            'Sign in',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 32.0,
-              fontWeight: FontWeight.bold,
-            ),
+          SizedBox(
+            height: 50.0,
+            child: _buildHeader(),
           ),
           SizedBox(height: 48.0),
           // Inicio de sesión con Google
@@ -95,7 +120,7 @@ class SignInPage extends StatelessWidget {
             text: 'Sign in with Google',
             textColor: Colors.black87,
             color: Colors.white,
-            onPressed: () => _signInWithGoogle(context),
+            onPressed: _isLoading ? null : () => _signInWithGoogle(context),
           ),
           SizedBox(height: 8.0),
           // Inicio de sesión con Facebook
@@ -104,7 +129,7 @@ class SignInPage extends StatelessWidget {
             text: 'Sign in with Facebook',
             textColor: Colors.white,
             color: Color(0xFF334D92),
-            onPressed: () => _signInWithFacebook(context),
+            onPressed: _isLoading ? null : () => _signInWithFacebook(context),
           ),
           SizedBox(height: 8.0),
           // Inicio de sesión con Email
@@ -112,7 +137,7 @@ class SignInPage extends StatelessWidget {
             text: 'Sign in with email',
             textColor: Colors.white,
             color: (Colors.teal[700])!,
-            onPressed: () => _signInWithEmail(context),
+            onPressed: _isLoading ? null : () => _signInWithEmail(context),
           ),
           SizedBox(height: 8.0),
           Text(
@@ -132,9 +157,25 @@ class SignInPage extends StatelessWidget {
             textColor: Colors.black,
             color: (Colors.lime[300])!,
             // 'onPressed' es un callback, y no es necesario agregar (), pues no toma argumentos
-            onPressed: () => _signInAnonymously(context),
+            onPressed: _isLoading ? null : () => _signInAnonymously(context),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildHeader() {
+    if (_isLoading) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+    return Text(
+      'Sign in',
+      textAlign: TextAlign.center,
+      style: TextStyle(
+        fontSize: 32.0,
+        fontWeight: FontWeight.bold,
       ),
     );
   }

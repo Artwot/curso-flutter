@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../common_widgets/show_exception_alert_dialog.dart';
 import '../services/auth.dart';
 import '/app/sign_in/validators.dart';
 import '/common_widgets/form_submit_button.dart';
@@ -28,6 +30,17 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   bool _submitted = false;
   bool _isLoading = false;
 
+  // El método dispose() es definido en el State de la clase.
+  // Es invocado cuando un 'widget' es removido del 'widget tree'
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
+    super.dispose();
+  }
+
   void _submit() async {
     setState(() {
       _submitted = true;
@@ -42,12 +55,13 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         await auth.createUserWithEmailAndPassword(_email, _password);
       }
       Navigator.of(context).pop();
-    } catch (e) {
+    } on FirebaseAuthException catch (e) {
       // Personalizar los widgets Dialog para cada plataforma
-      showAlertDialog(context,
-          title: 'Sign in failed',
-          content: e.toString(),
-          defaultActionText: 'Ok');
+      showExceptionAlertDialog(
+        context,
+        title: 'Sign in failed',
+        exception: e,
+      );
     } finally {
       // finally se ejecuta en todos los casos: si se ejecuta o falla la instrucción
       setState(() {
