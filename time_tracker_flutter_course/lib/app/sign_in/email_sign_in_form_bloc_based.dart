@@ -2,15 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '/app/sign_in/email_sign_in_bloc.dart';
-import '/app/sign_in/validators.dart';
 import '/common_widgets/form_submit_button.dart';
 
 import '../../common_widgets/show_exception_alert_dialog.dart';
 import '../services/auth.dart';
 import 'email_sign_in_model.dart';
 
-class EmailSignInFormBlocBased extends StatefulWidget
-    with EmailAndPasswordValidator {
+class EmailSignInFormBlocBased extends StatefulWidget {
   EmailSignInFormBlocBased({required this.bloc});
   final EmailSignInBloc bloc;
 
@@ -32,11 +30,14 @@ class EmailSignInFormBlocBased extends StatefulWidget
 
 class _EmailSignInFormBlocBasedState extends State<EmailSignInFormBlocBased> {
   // Crear controllers para los campos de texto
+  // TextEditingControllers mantienen un estado, por lo tanto, siempre debemos
+  // crearlos dentro de Stateful widgets
+  // Podemos tener widgets que sean Stateless solo cuando son puros, es decir,
+  // no tienen efectos colaterales, o no modifican el State.
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
-  EmailSignInFormType _formType = EmailSignInFormType.signIn;
 
   // El método dispose() es definido en el State de la clase.
   // Es invocado cuando un 'widget' es removido del árbol de Widgets junto con
@@ -66,7 +67,7 @@ class _EmailSignInFormBlocBasedState extends State<EmailSignInFormBlocBased> {
 
   void _emailEditingComplete(EmailSignInModel model) {
     // Si el campo de email es invalido, no permite cambiar el focus del campo.
-    final newFocus = widget.emailValidator.isValid(model.email)
+    final newFocus = model.emailValidator.isValid(model.email)
         ? _passwordFocusNode
         : _emailFocusNode;
     // Se traslada al siguiente campo del formulario
@@ -74,34 +75,13 @@ class _EmailSignInFormBlocBasedState extends State<EmailSignInFormBlocBased> {
   }
 
   // Intercambiar entre los textos mostrados
-  void _toggleFormType(EmailSignInModel model) {
-    widget.bloc.updateWith(
-      email: '',
-      password: '',
-      formType: model.formType == EmailSignInFormType.signIn
-          ? EmailSignInFormType.register
-          : EmailSignInFormType.signIn,
-      isLoading: false,
-      submitted: false,
-    );
+  void _toggleFormType() {
+    widget.bloc.toggleFormType();
     _emailController.clear();
     _passwordController.clear();
   }
 
   List<Widget> _buildChildren(EmailSignInModel model) {
-    // Seleccionar el tipo de texto
-    final primaryText = model.formType == EmailSignInFormType.signIn
-        ? 'Sign in'
-        : 'Create an account';
-    final secondaryText = _formType == EmailSignInFormType.signIn
-        ? 'Need an account? Register'
-        : 'Have an account? Sign in';
-
-    // Valida si _email y _password no son campos vacíos
-    bool submitEnabled = widget.emailValidator.isValid(model.email) &&
-        widget.passwordValidator.isValid(model.password) &&
-        !model.isLoading;
-
     return [
       // Campo Email
       _buildEmailTextField(model),
@@ -110,51 +90,47 @@ class _EmailSignInFormBlocBasedState extends State<EmailSignInFormBlocBased> {
       _buildPasswordTextField(model),
       SizedBox(height: 8.0),
       FormSubmitButton(
-        text: primaryText,
-        onPressed: submitEnabled ? _submit : null,
+        text: model.primaryButtonText,
+        onPressed: model.canSubmit ? _submit : null,
       ),
       SizedBox(height: 8.0),
       TextButton(
-        child: Text(secondaryText),
-        onPressed: !model.isLoading ? () => _toggleFormType(model) : null,
+        child: Text(model.secondaryButtonText),
+        onPressed: !model.isLoading ? _toggleFormType : null,
       )
     ];
   }
 
   TextField _buildPasswordTextField(EmailSignInModel model) {
-    bool showErrorText =
-        model.submitted && !widget.passwordValidator.isValid(model.password);
     return TextField(
       controller: _passwordController,
       focusNode: _passwordFocusNode,
       decoration: InputDecoration(
         labelText: 'Password',
-        errorText: showErrorText ? widget.invalidPasswordErrorText : null,
+        errorText: model.passwordErrorText,
         enabled: model.isLoading == false,
       ),
       obscureText: true,
-      onChanged: (password) => widget.bloc.updateWith(password: password),
+      onChanged: widget.bloc.updatePassword,
       textInputAction: TextInputAction.done,
     );
   }
 
   TextField _buildEmailTextField(EmailSignInModel model) {
-    bool showErrorText =
-        model.submitted && !widget.passwordValidator.isValid(model.email);
     return TextField(
       controller: _emailController,
       focusNode: _emailFocusNode,
       decoration: InputDecoration(
         labelText: 'Email',
         hintText: 'test@test.com',
-        errorText: showErrorText ? widget.invalidPasswordErrorText : null,
+        errorText: model.emailErrorText,
         enabled: model.isLoading == false,
       ),
       // Quitar sugerencias en el teclado
       autocorrect: false,
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
-      onChanged: (email) => widget.bloc.updateWith(email: email),
+      onChanged: widget.bloc.updateEmail,
       onEditingComplete: () => _emailEditingComplete(model),
     );
   }
