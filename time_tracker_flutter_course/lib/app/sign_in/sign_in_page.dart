@@ -3,11 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../common_widgets/show_exception_alert_dialog.dart';
 import '../services/auth.dart';
+import 'sign_in_bloc.dart';
 import 'sign_in_button.dart';
 import 'email_sign_in_page.dart';
 import 'social_sign_in_button.dart';
 
 class SignInPage extends StatefulWidget {
+  // Usar el método 'static create(context)' cuando se crean widgets que requieren un BLoC
+  static Widget create(BuildContext context) {
+    return Provider<SignInBloc>(
+      create: (_) => SignInBloc(),
+      child: SignInPage(),
+    );
+  }
+
   @override
   State<SignInPage> createState() => _SignInPageState();
 }
