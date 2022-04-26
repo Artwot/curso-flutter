@@ -97,18 +97,26 @@ class _SignInPageState extends State<SignInPage> {
 
   @override
   Widget build(BuildContext context) {
+    final bloc = Provider.of<SignInBloc>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Text('Time Tracker'),
         elevation: 4.0,
       ),
-      body: _buildContent(context),
+      body: StreamBuilder<bool>(
+          stream: bloc.isLoadingStream,
+          initialData: false,
+          builder: (context, snapshot) {
+            // Las variables 'snapshot' contienen:
+            // connectionState, hasError/error, hasData/data
+            return _buildContent(context, snapshot.data);
+          }),
       backgroundColor: Colors.grey[200],
     );
   }
 
 // Se retorna un Widget, ya que Container hereda de Widget, así que no hay inconveniente.
-  Widget _buildContent(BuildContext context) {
+  Widget _buildContent(BuildContext context, bool? isLoading) {
     return Container(
       padding: EdgeInsets.all(16.0),
       // Un child puede tener un Widget dentro de sí mismo.
