@@ -5,16 +5,16 @@ import '../../common_widgets/show_exception_alert_dialog.dart';
 import '../services/auth.dart';
 import '/app/sign_in/validators.dart';
 import '/common_widgets/form_submit_button.dart';
-import '../../common_widgets/show_alert_dialog.dart';
+import 'email_sign_in_model.dart';
 
-enum EmailSignInFormType { signIn, register }
-
-class EmailSignInForm extends StatefulWidget with EmailAndPasswordValidator {
+class EmailSignInFormStateful extends StatefulWidget
+    with EmailAndPasswordValidator {
   @override
-  State<EmailSignInForm> createState() => _EmailSignInFormState();
+  State<EmailSignInFormStateful> createState() =>
+      _EmailSignInFormStatefulState();
 }
 
-class _EmailSignInFormState extends State<EmailSignInForm> {
+class _EmailSignInFormStatefulState extends State<EmailSignInFormStateful> {
   // Crear controllers para los campos de texto
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
