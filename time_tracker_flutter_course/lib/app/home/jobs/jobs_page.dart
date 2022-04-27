@@ -4,6 +4,7 @@ import '../../../common_widgets/show_alert_dialog.dart';
 import '../../services/auth.dart';
 import '../../services/database.dart';
 import 'add_job_page.dart';
+import 'job_list_tile.dart';
 
 class JobsPage extends StatelessWidget {
   Future<void> _signOut(BuildContext context) async {
@@ -60,7 +61,14 @@ class JobsPage extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final jobs = snapshot.data as dynamic;
-          final children = jobs.map<Widget>((job) => Text(job.name)).toList();
+          final children = jobs
+              .map<Widget>(
+                (job) => JobListTile(
+                  job: job,
+                  onTap: () {},
+                ),
+              )
+              .toList();
           return ListView(
             children: children,
           );
