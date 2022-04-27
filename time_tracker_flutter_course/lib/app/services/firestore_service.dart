@@ -20,11 +20,8 @@ class FirestoreService {
     // la bd en FireStore
     final snapshots = reference.snapshots();
     return snapshots.map(
-      (snapshot) => snapshot.docs
-          .map(
-            (snapshot) => builder(snapshot.data()),
-          )
-          .toList(),
+      (snapshot) =>
+          snapshot.docs.map((snapshot) => builder(snapshot.data())).toList(),
     );
   }
 }
