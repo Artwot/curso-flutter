@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_core/firebase_core.dart';
 import '../../../common_widgets/show_alert_dialog.dart';
-import '../../../common_widgets/show_exception_alert_dialog.dart';
 import '../../services/auth.dart';
 import '../../services/database.dart';
-import '../models/job.dart';
 import 'add_job_page.dart';
 
 class JobsPage extends StatelessWidget {
@@ -28,21 +25,6 @@ class JobsPage extends StatelessWidget {
     );
 
     if (didRequestSignOut == true) _signOut(context);
-  }
-
-  Future<void>? _createJob(BuildContext context) async {
-    try {
-      final database = Provider.of<Database>(context, listen: false);
-      await database.createJob(
-        Job(name: 'Blogging', ratePerHour: 10),
-      );
-    } on FirebaseException catch (e) {
-      showExceptionAlertDialog(
-        context,
-        title: 'Operation failed',
-        exception: e,
-      );
-    }
   }
 
   @override
