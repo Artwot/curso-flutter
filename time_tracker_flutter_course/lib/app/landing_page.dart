@@ -26,7 +26,7 @@ class LandingPage extends StatelessWidget {
             final User? user = snapshot.data;
             // Si el usuario no inició sesión, dirigirlo a SignInPage
             if (user == null) {
-              return SignInPage();
+              return SignInPage.create(context);
             }
             return HomePage();
           }
