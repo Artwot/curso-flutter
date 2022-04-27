@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import '../../../common_widgets/show_alert_dialog.dart';
 import '../../services/auth.dart';
 import '../../services/database.dart';
-import 'add_job_page.dart';
+import 'edit_job_page.dart';
 import 'job_list_tile.dart';
 
 class JobsPage extends StatelessWidget {
@@ -49,7 +49,7 @@ class JobsPage extends StatelessWidget {
       body: _buildContents(context),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () => AddJobPage.show(context),
+        onPressed: () => EditJobPage.show(context),
       ),
     );
   }

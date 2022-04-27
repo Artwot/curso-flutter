@@ -6,26 +6,31 @@ import '../../../common_widgets/show_exception_alert_dialog.dart';
 import '../../services/database.dart';
 import '../models/job.dart';
 
-class AddJobPage extends StatefulWidget {
-  const AddJobPage({Key? key, required this.database}) : super(key: key);
+class EditJobPage extends StatefulWidget {
+  const EditJobPage({
+    Key? key,
+    required this.database,
+    required this.job,
+  }) : super(key: key);
   final Database database;
+  final Job? job;
 
   // Mostrar el widget a través de una navegación
-  static Future<void> show(BuildContext context) async {
+  static Future<void> show(BuildContext context, {Job? job}) async {
     final database = Provider.of<Database>(context, listen: false);
     await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => AddJobPage(database: database),
+        builder: (context) => EditJobPage(database: database, job: job),
         fullscreenDialog: true,
       ),
     );
   }
 
   @override
-  State<AddJobPage> createState() => _AddJobPageState();
+  State<EditJobPage> createState() => _EditJobPageState();
 }
 
-class _AddJobPageState extends State<AddJobPage> {
+class _EditJobPageState extends State<EditJobPage> {
   final _formKey = GlobalKey<FormState>();
 
   String? _name;
