@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../common_widgets/show_alert_dialog.dart';
 import '../../../common_widgets/show_exception_alert_dialog.dart';
 import '../../services/database.dart';
 import '../models/job.dart';
@@ -41,9 +42,23 @@ class _AddJobPageState extends State<AddJobPage> {
 
   Future<void> _submit() async {
     try {
-      final job = Job(name: _name!, ratePerHour: _ratePerHour!);
-      await widget.database.createJob(job);
-      Navigator.of(context).pop();
+      // Obtiene el primer valor en el Stream
+      final jobs = await widget.database.jobsStream().first;
+      // Obtener los nombres de jobs
+      final allNames = jobs.map((job) => job?.name).toList();
+      // Verificar que no existe un job con el mismo nombre
+      if (allNames.contains(_name)) {
+        showAlertDialog(
+          context,
+          title: 'Name already used',
+          content: 'Please choose a different job name',
+          defaultActionText: 'Ok',
+        );
+      } else {
+        final job = Job(name: _name!, ratePerHour: _ratePerHour!);
+        await widget.database.createJob(job);
+        Navigator.of(context).pop();
+      }
     } on FirebaseException catch (e) {
       showExceptionAlertDialog(
         context,
