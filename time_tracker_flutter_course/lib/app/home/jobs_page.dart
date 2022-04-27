@@ -25,6 +25,8 @@ class JobsPage extends StatelessWidget {
     if (didRequestSignOut == true) _signOut(context);
   }
 
+  void _createJob() {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,6 +44,10 @@ class JobsPage extends StatelessWidget {
             onPressed: () => _confirmSignOut(context),
           )
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: _createJob,
       ),
     );
   }
