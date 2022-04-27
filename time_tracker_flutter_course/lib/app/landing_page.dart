@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'services/auth.dart';
 import 'sign_in/sign_in_page.dart';
-import 'home_page.dart';
+import 'home/jobs_page.dart';
 
 /* 
   La comunicación entre widgets se produce a través de los 'callbacks'
@@ -28,7 +28,7 @@ class LandingPage extends StatelessWidget {
             if (user == null) {
               return SignInPage.create(context);
             }
-            return HomePage();
+            return JobsPage();
           }
           return Scaffold(
             body: Center(
