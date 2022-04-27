@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../common_widgets/show_exception_alert_dialog.dart';
 import '../services/auth.dart';
-import 'sign_in_bloc.dart';
+import 'sign_in_manager.dart';
 import 'sign_in_button.dart';
 import 'email_sign_in_page.dart';
 import 'social_sign_in_button.dart';
@@ -14,7 +14,7 @@ class SignInPage extends StatelessWidget {
     required this.bloc,
     required this.isLoading,
   }) : super(key: key);
-  final SignInBloc? bloc;
+  final SignInManager? bloc;
   final bool isLoading;
 
   // Usar el método 'static create(context)' cuando se crean widgets que requieren un BLoC
@@ -25,9 +25,9 @@ class SignInPage extends StatelessWidget {
       // Usar el widget Consumer nos permite llamar el valor cada vez que este
       // cambia en la propiedad build
       child: Consumer<ValueNotifier<bool>>(
-        builder: (_, isLoading, __) => Provider<SignInBloc>(
-          create: (_) => SignInBloc(auth: auth, isLoading: isLoading),
-          child: Consumer<SignInBloc>(
+        builder: (_, isLoading, __) => Provider<SignInManager>(
+          create: (_) => SignInManager(auth: auth, isLoading: isLoading),
+          child: Consumer<SignInManager>(
             builder: (_, bloc, __) => SignInPage(
               bloc: bloc,
               isLoading: isLoading.value,
