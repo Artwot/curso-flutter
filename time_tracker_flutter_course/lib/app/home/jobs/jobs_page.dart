@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
-import '../../common_widgets/show_alert_dialog.dart';
-import '../../common_widgets/show_exception_alert_dialog.dart';
-import '../services/auth.dart';
-import '../services/database.dart';
-import 'models/job.dart';
+import '../../../common_widgets/show_alert_dialog.dart';
+import '../../../common_widgets/show_exception_alert_dialog.dart';
+import '../../services/auth.dart';
+import '../../services/database.dart';
+import '../models/job.dart';
+import 'add_job_page.dart';
 
 class JobsPage extends StatelessWidget {
   Future<void> _signOut(BuildContext context) async {
@@ -65,7 +66,7 @@ class JobsPage extends StatelessWidget {
       body: _buildContents(context),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () => _createJob(context),
+        onPressed: () => AddJobPage.show(context),
       ),
     );
   }
