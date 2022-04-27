@@ -3,23 +3,37 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../common_widgets/show_exception_alert_dialog.dart';
 import '../services/auth.dart';
-import 'sign_in_bloc.dart';
+import 'sign_in_manager.dart';
 import 'sign_in_button.dart';
 import 'email_sign_in_page.dart';
 import 'social_sign_in_button.dart';
 
 class SignInPage extends StatelessWidget {
-  const SignInPage({Key? key, required this.bloc}) : super(key: key);
-  final SignInBloc? bloc;
+  const SignInPage({
+    Key? key,
+    required this.bloc,
+    required this.isLoading,
+  }) : super(key: key);
+  final SignInManager? bloc;
+  final bool isLoading;
 
   // Usar el método 'static create(context)' cuando se crean widgets que requieren un BLoC
   static Widget create(BuildContext context) {
     final auth = Provider.of<AuthBase>(context, listen: false);
-    return Provider<SignInBloc>(
-      create: (_) => SignInBloc(auth: auth),
-      dispose: (_, bloc) => bloc.dispose(),
-      child: Consumer<SignInBloc>(
-        builder: (_, bloc, __) => SignInPage(bloc: bloc),
+    return ChangeNotifierProvider<ValueNotifier<bool>>(
+      create: (_) => ValueNotifier<bool>(false),
+      // Usar el widget Consumer nos permite llamar el valor cada vez que este
+      // cambia en la propiedad build
+      child: Consumer<ValueNotifier<bool>>(
+        builder: (_, isLoading, __) => Provider<SignInManager>(
+          create: (_) => SignInManager(auth: auth, isLoading: isLoading),
+          child: Consumer<SignInManager>(
+            builder: (_, bloc, __) => SignInPage(
+              bloc: bloc,
+              isLoading: isLoading.value,
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -38,11 +52,6 @@ class SignInPage extends StatelessWidget {
 
   // Inicio de sesión de forma anónima
   Future<void> _signInAnonymously(BuildContext context) async {
-    /*
-      Usamos el patrón de diseño Singleton, el cual es usado en POO con la 
-      finalidad de usar no más de una instancia de una clase. Además provee
-      acceso global a los recursos
-    */
     // Retorna un Future<UserCredencial>
     try {
       await bloc?.signInAnonymously();
@@ -85,26 +94,18 @@ class SignInPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = Provider.of<SignInBloc>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Text('Time Tracker'),
         elevation: 4.0,
       ),
-      body: StreamBuilder<bool>(
-          stream: bloc.isLoadingStream,
-          initialData: false,
-          builder: (context, snapshot) {
-            // Las variables 'snapshot' contienen:
-            // connectionState, hasError/error, hasData/data
-            return _buildContent(context, (snapshot.data)!);
-          }),
+      body: _buildContent(context),
       backgroundColor: Colors.grey[200],
     );
   }
 
 // Se retorna un Widget, ya que Container hereda de Widget, así que no hay inconveniente.
-  Widget _buildContent(BuildContext context, bool isLoading) {
+  Widget _buildContent(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(16.0),
       // Un child puede tener un Widget dentro de sí mismo.
@@ -116,7 +117,7 @@ class SignInPage extends StatelessWidget {
         children: <Widget>[
           SizedBox(
             height: 50.0,
-            child: _buildHeader(isLoading),
+            child: _buildHeader(),
           ),
           SizedBox(height: 48.0),
           // Inicio de sesión con Google
@@ -169,7 +170,7 @@ class SignInPage extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(bool isLoading) {
+  Widget _buildHeader() {
     if (isLoading) {
       return Center(
         child: CircularProgressIndicator(),
