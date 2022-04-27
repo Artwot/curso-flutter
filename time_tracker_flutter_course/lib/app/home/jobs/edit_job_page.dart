@@ -36,6 +36,18 @@ class _EditJobPageState extends State<EditJobPage> {
   String? _name;
   int? _ratePerHour;
 
+  // NOTA: initState() no es llamado en 'hot reload'
+  @override
+  void initState() {
+    super.initState();
+    // Si job no es null entonces se inicializan los valores para mostrarlos en
+    // los campos del formulario
+    if (widget.job != null) {
+      _name = widget.job?.name;
+      _ratePerHour = widget.job?.ratePerHour;
+    }
+  }
+
   bool _validateAndSaveForm() {
     final form = _formKey.currentState;
     if (form?.validate() == true) {
@@ -51,6 +63,9 @@ class _EditJobPageState extends State<EditJobPage> {
       final jobs = await widget.database.jobsStream().first;
       // Obtener los nombres de jobs
       final allNames = jobs.map((job) => job?.name).toList();
+      if (widget.job != null) {
+        allNames.remove(widget.job?.name);
+      }
       // Verificar que no existe un job con el mismo nombre
       if (allNames.contains(_name)) {
         showAlertDialog(
@@ -60,8 +75,9 @@ class _EditJobPageState extends State<EditJobPage> {
           defaultActionText: 'Ok',
         );
       } else {
-        final job = Job(name: _name!, ratePerHour: _ratePerHour!);
-        await widget.database.createJob(job);
+        final id = widget.job?.id ?? documentIdFormCurrentDate();
+        final job = Job(id: id, name: _name!, ratePerHour: _ratePerHour!);
+        await widget.database.setJob(job);
         Navigator.of(context).pop();
       }
     } on FirebaseException catch (e) {
@@ -78,7 +94,7 @@ class _EditJobPageState extends State<EditJobPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 2.0,
-        title: Text('New Job'),
+        title: Text(widget.job == null ? 'New Job' : 'Edit job'),
         actions: [
           TextButton(
             onPressed: _submit,
@@ -126,6 +142,7 @@ class _EditJobPageState extends State<EditJobPage> {
     return [
       TextFormField(
         decoration: InputDecoration(labelText: 'Job name'),
+        initialValue: _name,
         validator: (value) =>
             (value?.isNotEmpty)! ? null : 'Name can\'t be empty',
         // Se recomienda usar la propiedad onSaved para actualizar variables locales
@@ -133,6 +150,7 @@ class _EditJobPageState extends State<EditJobPage> {
       ),
       TextFormField(
         decoration: InputDecoration(labelText: 'Rate per hour'),
+        initialValue: _ratePerHour != null ? '$_ratePerHour' : null,
         keyboardType: TextInputType.numberWithOptions(
           signed: false,
           decimal: false,
