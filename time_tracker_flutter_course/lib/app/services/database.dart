@@ -1,6 +1,4 @@
 import '../home/models/job.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'api_path.dart';
 import 'firestore_service.dart';
 
@@ -9,6 +7,9 @@ abstract class Database {
   Stream<List<Job?>> jobsStream();
 }
 
+// Obtener el tiempo actual y convertir el Objeto de tipo DateTime a un String
+String documentIdFormCurrentDate() => DateTime.now().toIso8601String();
+
 class FirestoreDatabase implements Database {
   FirestoreDatabase({required this.uid});
   final String uid;
@@ -16,7 +17,7 @@ class FirestoreDatabase implements Database {
   final _service = FirestoreService.instance;
 
   Future<void> createJob(Job job) => _service.setData(
-        path: APIPath.job(uid, 'job_abc'),
+        path: APIPath.job(uid, documentIdFormCurrentDate()),
         data: job.toMap(),
       );
 
