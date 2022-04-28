@@ -1,8 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../common_widgets/show_alert_dialog.dart';
-import '../../../common_widgets/show_exception_alert_dialog.dart';
+import '/common_widgets/show_alert_dialog.dart';
+import '/common_widgets/show_exception_alert_dialog.dart';
 import '../../services/database.dart';
 import '../models/job.dart';
 
@@ -20,7 +20,10 @@ class EditJobPage extends StatefulWidget {
     final database = Provider.of<Database>(context, listen: false);
     await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => EditJobPage(database: database, job: job),
+        builder: (context) => EditJobPage(
+          database: database,
+          job: job,
+        ),
         fullscreenDialog: true,
       ),
     );
@@ -58,34 +61,36 @@ class _EditJobPageState extends State<EditJobPage> {
   }
 
   Future<void> _submit() async {
-    try {
-      // Obtiene el primer valor en el Stream
-      final jobs = await widget.database.jobsStream().first;
-      // Obtener los nombres de jobs
-      final allNames = jobs.map((job) => job?.name).toList();
-      if (widget.job != null) {
-        allNames.remove(widget.job?.name);
-      }
-      // Verificar que no existe un job con el mismo nombre
-      if (allNames.contains(_name)) {
-        showAlertDialog(
+    if (_validateAndSaveForm()) {
+      try {
+        // Obtiene el primer valor en el Stream
+        final jobs = await widget.database.jobsStream().first;
+        // Obtener los nombres de jobs
+        final allNames = jobs.map((job) => job?.name).toList();
+        if (widget.job != null) {
+          allNames.remove(widget.job?.name);
+        }
+        // Verificar que no existe un job con el mismo nombre
+        if (allNames.contains(_name)) {
+          showAlertDialog(
+            context,
+            title: 'Name already used',
+            content: 'Please choose a different job name',
+            defaultActionText: 'Ok',
+          );
+        } else {
+          final id = widget.job?.id ?? documentIdFormCurrentDate();
+          final job = Job(id: id, name: _name!, ratePerHour: _ratePerHour!);
+          await widget.database.setJob(job);
+          Navigator.of(context).pop();
+        }
+      } on FirebaseException catch (e) {
+        showExceptionAlertDialog(
           context,
-          title: 'Name already used',
-          content: 'Please choose a different job name',
-          defaultActionText: 'Ok',
+          title: 'Operation failed',
+          exception: e,
         );
-      } else {
-        final id = widget.job?.id ?? documentIdFormCurrentDate();
-        final job = Job(id: id, name: _name!, ratePerHour: _ratePerHour!);
-        await widget.database.setJob(job);
-        Navigator.of(context).pop();
       }
-    } on FirebaseException catch (e) {
-      showExceptionAlertDialog(
-        context,
-        title: 'Operation failed',
-        exception: e,
-      );
     }
   }
 
@@ -155,7 +160,7 @@ class _EditJobPageState extends State<EditJobPage> {
           signed: false,
           decimal: false,
         ),
-        onSaved: (value) => _ratePerHour = int.parse(value!),
+        onSaved: (value) => _ratePerHour = int.tryParse(value!) ?? 0,
       ),
     ];
   }
