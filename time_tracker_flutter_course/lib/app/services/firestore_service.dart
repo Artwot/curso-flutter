@@ -5,10 +5,19 @@ class FirestoreService {
   static final instance = FirestoreService._();
 
   // _setData define un solo punto de entrada para todas las inserciones a Firestore
-  Future<void> setData({String? path, Map<String, dynamic>? data}) async {
-    final reference = FirebaseFirestore.instance.doc(path!);
+  Future<void> setData({
+    required String path,
+    required Map<String, dynamic> data,
+  }) async {
+    final reference = FirebaseFirestore.instance.doc(path);
     print('$path: $data');
-    await reference.set(data!);
+    await reference.set(data);
+  }
+
+  Future<void> deleData({required String path}) async {
+    final reference = FirebaseFirestore.instance.doc(path);
+    print('delete: $path');
+    await reference.delete();
   }
 
   Stream<List<T>> collectionStream<T>({
