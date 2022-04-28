@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
-
 import '../models/job.dart';
+
+/*
+  Los 4 States de la UI
+  - LOADING
+  - DATA
+  - EMPTY
+  - ERROR
+*/
 
 class JobListTile extends StatelessWidget {
   const JobListTile({
