@@ -15,13 +15,13 @@ class JobListTile extends StatelessWidget {
     required this.job,
     required this.onTap,
   }) : super(key: key);
-  final Job job;
+  final Job? job;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(job.name),
+      title: Text(job!.name),
       trailing: Icon(Icons.chevron_right),
       onTap: onTap,
     );
