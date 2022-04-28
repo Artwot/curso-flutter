@@ -44,7 +44,6 @@ class ListItemsBuilder<T> extends StatelessWidget {
       itemCount: items!.length + 2,
       separatorBuilder: ((context, index) => Divider(
             height: 0.5,
-            color: Colors.red,
           )),
       itemBuilder: (context, index) {
         if (index == 0 || index == items.length + 1) {
