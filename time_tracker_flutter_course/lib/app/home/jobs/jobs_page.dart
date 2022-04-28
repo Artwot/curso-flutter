@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_core/firebase_core.dart';
-import '../../common_widgets/show_alert_dialog.dart';
-import '../../common_widgets/show_exception_alert_dialog.dart';
-import '../services/auth.dart';
-import '../services/database.dart';
-import 'models/job.dart';
+import '../../../common_widgets/show_alert_dialog.dart';
+import '../../services/auth.dart';
+import '../../services/database.dart';
+import 'edit_job_page.dart';
+import 'job_list_tile.dart';
 
 class JobsPage extends StatelessWidget {
   Future<void> _signOut(BuildContext context) async {
@@ -29,21 +28,6 @@ class JobsPage extends StatelessWidget {
     if (didRequestSignOut == true) _signOut(context);
   }
 
-  Future<void>? _createJob(BuildContext context) async {
-    try {
-      final database = Provider.of<Database>(context, listen: false);
-      await database.createJob(
-        Job(name: 'Blogging', ratePerHour: 10),
-      );
-    } on FirebaseException catch (e) {
-      showExceptionAlertDialog(
-        context,
-        title: 'Operation failed',
-        exception: e,
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +49,7 @@ class JobsPage extends StatelessWidget {
       body: _buildContents(context),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () => _createJob(context),
+        onPressed: () => EditJobPage.show(context),
       ),
     );
   }
@@ -77,7 +61,14 @@ class JobsPage extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final jobs = snapshot.data as dynamic;
-          final children = jobs.map<Widget>((job) => Text(job.name)).toList();
+          final children = jobs
+              .map<Widget>(
+                (job) => JobListTile(
+                  job: job,
+                  onTap: () => EditJobPage.show(context, job: job),
+                ),
+              )
+              .toList();
           return ListView(
             children: children,
           );
