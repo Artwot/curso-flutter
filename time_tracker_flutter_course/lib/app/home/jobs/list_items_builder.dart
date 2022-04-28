@@ -3,6 +3,12 @@ import 'empty_content.dart';
 
 typedef ItemWidgetBuilder<T> = Widget Function(BuildContext context, T? item);
 
+/*
+  El Patrón Builder
+  - Permite escribir código reusable
+  - Es usado consistentemente es Flutter
+*/
+
 class ListItemsBuilder<T> extends StatelessWidget {
   const ListItemsBuilder({
     Key? key,
@@ -34,12 +40,18 @@ class ListItemsBuilder<T> extends StatelessWidget {
 
   Widget _buildList(List<T?>? items) {
     // builder() nos permite tener un gran número de elementos dentro de una lista
-    return ListView.builder(
-      itemCount: items?.length,
-      itemBuilder: (context, index) => itemBuilder!(
-        context,
-        items![index],
-      ),
+    return ListView.separated(
+      itemCount: items!.length + 2,
+      separatorBuilder: ((context, index) => Divider(
+            height: 0.5,
+            color: Colors.red,
+          )),
+      itemBuilder: (context, index) {
+        if (index == 0 || index == items.length + 1) {
+          return Container();
+        }
+        return itemBuilder!(context, items[index - 1]);
+      },
     );
   }
 }
