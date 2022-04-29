@@ -47,23 +47,33 @@ class EntryListItem extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Row(children: <Widget>[
-          Text(dayOfWeek, style: TextStyle(fontSize: 18.0, color: Colors.grey)),
-          SizedBox(width: 15.0),
-          Text(startDate, style: TextStyle(fontSize: 18.0)),
-          if (job.ratePerHour > 0.0) ...<Widget>[
-            Expanded(child: Container()),
+        Row(
+          children: <Widget>[
             Text(
-              payFormatted,
-              style: TextStyle(fontSize: 16.0, color: Colors.green[700]),
+              dayOfWeek,
+              style: TextStyle(fontSize: 18.0, color: Colors.grey),
             ),
+            SizedBox(width: 15.0),
+            Text(
+              startDate,
+              style: TextStyle(fontSize: 18.0),
+            ),
+            if (job.ratePerHour > 0.0) ...<Widget>[
+              Expanded(child: Container()),
+              Text(
+                payFormatted,
+                style: TextStyle(fontSize: 16.0, color: Colors.green[700]),
+              ),
+            ],
           ],
-        ]),
-        Row(children: <Widget>[
-          Text('$startTime - $endTime', style: TextStyle(fontSize: 16.0)),
-          Expanded(child: Container()),
-          Text(durationFormatted, style: TextStyle(fontSize: 16.0)),
-        ]),
+        ),
+        Row(
+          children: <Widget>[
+            Text('$startTime - $endTime', style: TextStyle(fontSize: 16.0)),
+            Expanded(child: Container()),
+            Text(durationFormatted, style: TextStyle(fontSize: 16.0)),
+          ],
+        ),
         if (entry.comment!.isNotEmpty)
           Text(
             entry.comment!,
