@@ -5,9 +5,9 @@ import '../../../common_widgets/show_alert_dialog.dart';
 import '../../../common_widgets/show_exception_alert_dialog.dart';
 import '../../services/auth.dart';
 import '../../services/database.dart';
+import '../job_entries/job_entries_page.dart';
 import '../models/job.dart';
 import 'edit_job_page.dart';
-import 'empty_content.dart';
 import 'job_list_tile.dart';
 import 'list_items_builder.dart';
 
@@ -64,7 +64,10 @@ class JobsPage extends StatelessWidget {
       body: _buildContents(context),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () => EditJobPage.show(context),
+        onPressed: () => EditJobPage.show(
+          context,
+          database: Provider.of<Database>(context, listen: false),
+        ),
       ),
     );
   }
@@ -83,7 +86,7 @@ class JobsPage extends StatelessWidget {
             onDismissed: (direction) => _delete(context, job!),
             child: JobListTile(
               job: job,
-              onTap: () => EditJobPage.show(context, job: job),
+              onTap: () => JobEntriesPage.show(context, job!),
             ),
           ),
         );
