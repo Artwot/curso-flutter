@@ -1,10 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../common_widgets/show_alert_dialog.dart';
+import '../../../common_widgets/show_exception_alert_dialog.dart';
 import '../../services/auth.dart';
 import '../../services/database.dart';
+import '../models/job.dart';
 import 'edit_job_page.dart';
+import 'empty_content.dart';
 import 'job_list_tile.dart';
+import 'list_items_builder.dart';
 
 class JobsPage extends StatelessWidget {
   Future<void> _signOut(BuildContext context) async {
@@ -26,6 +31,16 @@ class JobsPage extends StatelessWidget {
     );
 
     if (didRequestSignOut == true) _signOut(context);
+  }
+
+  Future<void> _delete(BuildContext context, Job job) async {
+    try {
+      final database = Provider.of<Database>(context, listen: false);
+      await database.deleteJob(job);
+    } on FirebaseException catch (e) {
+      showExceptionAlertDialog(context,
+          title: 'Operation failed', exception: e);
+    }
   }
 
   @override
@@ -56,28 +71,21 @@ class JobsPage extends StatelessWidget {
 
   Widget _buildContents(BuildContext context) {
     final database = Provider.of<Database>(context, listen: false);
-    return StreamBuilder(
+    return StreamBuilder<List<Job?>>(
       stream: database.jobsStream(),
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final jobs = snapshot.data as dynamic;
-          final children = jobs
-              .map<Widget>(
-                (job) => JobListTile(
-                  job: job,
-                  onTap: () => EditJobPage.show(context, job: job),
-                ),
-              )
-              .toList();
-          return ListView(
-            children: children,
-          );
-        }
-        if (snapshot.hasError) {
-          return Center(child: Text('Some error ocurred'));
-        }
-        return Center(
-          child: CircularProgressIndicator(),
+        return ListItemsBuilder<Job>(
+          snapshot: snapshot,
+          itemBuilder: (context, job) => Dismissible(
+            key: Key('job-${job?.id}'),
+            background: Container(color: Colors.red),
+            direction: DismissDirection.endToStart,
+            onDismissed: (direction) => _delete(context, job!),
+            child: JobListTile(
+              job: job,
+              onTap: () => EditJobPage.show(context, job: job),
+            ),
+          ),
         );
       },
     );
