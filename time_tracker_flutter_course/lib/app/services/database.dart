@@ -8,10 +8,11 @@ abstract class Database {
   Future<void> setJob(Job job);
   Future<void> deleteJob(Job job);
   Stream<List<Job?>> jobsStream();
+  Stream<Job> jobStream({required String jobId});
 
   Future<void> setEntry(Entry entry);
   Future<void> deleteEntry(Entry entry);
-  Stream<List<Entry>>? entriesStream({Job job});
+  Stream<List<Entry>>? entriesStream({Job? job});
 }
 
 // Obtener el tiempo actual y convertir el Objeto de tipo DateTime a un String
@@ -42,6 +43,12 @@ class FirestoreDatabase implements Database {
     // Eliminar 'job'
     await _service.deleData(path: APIPath.job(uid, job.id));
   }
+
+  @override
+  Stream<Job> jobStream({required String jobId}) => _service.documentStream(
+        path: APIPath.job(uid, jobId),
+        builder: (data, documentId) => Job.fromMap(data, documentId)!,
+      );
 
   @override
   Stream<List<Job?>> jobsStream() => _service.collectionStream(
