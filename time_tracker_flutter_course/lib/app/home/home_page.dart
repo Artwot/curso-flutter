@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '/app/home/account/account_page.dart';
 import '/app/home/cupertino_home_scaffold.dart';
+import 'entries/entries_page.dart';
 import 'jobs/jobs_page.dart';
 import 'tab_item.dart';
 
@@ -30,7 +31,7 @@ class _HomePageState extends State<HomePage> {
   Map<TabItem, WidgetBuilder> get widgetBuilders {
     return {
       TabItem.jobs: (_) => JobsPage(),
-      TabItem.entries: (_) => Container(),
+      TabItem.entries: (context) => EntriesPage.create(context),
       TabItem.account: (_) => AccountPage(),
     };
   }
@@ -40,7 +41,8 @@ class _HomePageState extends State<HomePage> {
     // WillPopScope controla el botón de 'atrás' en Android, es usado con global
     // keys para controlar cada pila de navegación
     return WillPopScope(
-      onWillPop: () async => !await navigatorKeys[_currentTab]!.currentState!.maybePop(),
+      onWillPop: () async =>
+          !await navigatorKeys[_currentTab]!.currentState!.maybePop(),
       child: CupertinoHomeScaffold(
         currentTab: _currentTab,
         onSelectTab: _select,
