@@ -19,7 +19,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   TabItem _currentTab = TabItem.jobs;
 
-// Declarar 'navigatorKey' para acceder al estado del navigator
+// Declarar 'navigatorKeys' para acceder al estado del navigator
   final Map<TabItem, GlobalKey<NavigatorState>> navigatorKeys = {
     TabItem.jobs: GlobalKey<NavigatorState>(),
     TabItem.entries: GlobalKey<NavigatorState>(),
@@ -52,6 +52,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _select(TabItem tabItem) {
-    setState(() => _currentTab = tabItem);
+    if (tabItem == _currentTab) {
+      // pop to first route
+      navigatorKeys[tabItem]!.currentState!.popUntil((route) => route.isFirst);
+    } else {
+      setState(() => _currentTab = tabItem);
+    }
   }
 }
