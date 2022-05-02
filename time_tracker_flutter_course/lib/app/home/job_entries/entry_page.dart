@@ -85,7 +85,7 @@ class _EntryPageState extends State<EntryPage> {
     try {
       final entry = _entryFromState();
       await widget.database.setEntry(entry);
-      Navigator.of(context).pop();
+      Navigator.of(context, rootNavigator: true).pop();
     } on FirebaseException catch (e) {
       showExceptionAlertDialog(
         context,
