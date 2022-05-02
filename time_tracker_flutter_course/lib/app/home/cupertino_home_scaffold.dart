@@ -2,15 +2,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'tab_item.dart';
 
+/*
+  - Construye la UI
+  - Provee el callback onSelectTab
+*/
+
 class CupertinoHomeScaffold extends StatelessWidget {
   const CupertinoHomeScaffold({
     Key? key,
     required this.currentTab,
     required this.onSelectTab,
+    required this.widgetBuilders,
   }) : super(key: key);
 
   final TabItem currentTab;
   final ValueChanged<TabItem> onSelectTab;
+  final Map<TabItem, WidgetBuilder> widgetBuilders;
+
   @override
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
@@ -25,10 +33,9 @@ class CupertinoHomeScaffold extends StatelessWidget {
         ),
       ),
       tabBuilder: (context, index) {
+        final item = TabItem.values[index];
         return CupertinoTabView(
-          builder: (context) {
-            return Container();
-          },
+          builder: (context) => widgetBuilders[item]!(context),
         );
       },
     );
