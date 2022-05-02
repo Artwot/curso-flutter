@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '/common_widgets/show_alert_dialog.dart';
 import '/common_widgets/show_exception_alert_dialog.dart';
 import '../../services/database.dart';
@@ -16,12 +15,15 @@ class EditJobPage extends StatefulWidget {
   final Job? job;
 
   // Mostrar el widget a través de una navegación
-  static Future<void> show(BuildContext context, {Job? job}) async {
-    final database = Provider.of<Database>(context, listen: false);
+  static Future<void> show(
+    BuildContext context, {
+    Database? database,
+    Job? job,
+  }) async {
     await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => EditJobPage(
-          database: database,
+          database: database!,
           job: job,
         ),
         fullscreenDialog: true,
@@ -79,7 +81,7 @@ class _EditJobPageState extends State<EditJobPage> {
             defaultActionText: 'Ok',
           );
         } else {
-          final id = widget.job?.id ?? documentIdFormCurrentDate();
+          final id = widget.job?.id ?? documentIdFromCurrentDate();
           final job = Job(id: id, name: _name!, ratePerHour: _ratePerHour!);
           await widget.database.setJob(job);
           Navigator.of(context).pop();
