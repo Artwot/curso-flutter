@@ -56,8 +56,7 @@ class JobEntriesPage extends StatelessWidget {
               actions: <Widget>[
                 IconButton(
                   icon: Icon(Icons.edit, color: Colors.white),
-                  onPressed: () =>
-                      EditJobPage.show(context, database: database, job: job),
+                  onPressed: () => EditJobPage.show(context, database: database, job: job),
                 ),
                 IconButton(
                   icon: Icon(
@@ -65,7 +64,10 @@ class JobEntriesPage extends StatelessWidget {
                     color: Colors.white,
                   ),
                   onPressed: () => EntryPage.show(
-                      context: context, database: database, job: job),
+                    context: context,
+                    database: database,
+                    job: job,
+                  ),
                 )
               ],
             ),

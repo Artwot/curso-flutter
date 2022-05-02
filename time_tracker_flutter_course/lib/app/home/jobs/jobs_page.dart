@@ -15,8 +15,11 @@ class JobsPage extends StatelessWidget {
       final database = Provider.of<Database>(context, listen: false);
       await database.deleteJob(job);
     } on FirebaseException catch (e) {
-      showExceptionAlertDialog(context,
-          title: 'Operation failed', exception: e);
+      showExceptionAlertDialog(
+        context,
+        title: 'Operation failed',
+        exception: e,
+      );
     }
   }
 
