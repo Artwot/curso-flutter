@@ -1,15 +1,13 @@
 import 'dart:async';
-
 import 'package:rxdart/rxdart.dart';
-import 'package:time_tracker_flutter_course/app/services/auth.dart';
-import 'package:time_tracker_flutter_course/app/sign_in/email_sign_in_model.dart';
+import '/app/services/auth.dart';
+import '/app/sign_in/email_sign_in_model.dart';
 
 class EmailSignInBloc {
   EmailSignInBloc({required this.auth});
   final AuthBase auth;
 
-  final _modelSubject =
-      BehaviorSubject<EmailSignInModel>.seeded(EmailSignInModel());
+  final _modelSubject = BehaviorSubject<EmailSignInModel>.seeded(EmailSignInModel());
   Stream<EmailSignInModel> get modelStream => _modelSubject.stream;
   EmailSignInModel get _model => _modelSubject.value;
 

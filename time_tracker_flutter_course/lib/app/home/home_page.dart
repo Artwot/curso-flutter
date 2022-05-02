@@ -41,8 +41,7 @@ class _HomePageState extends State<HomePage> {
     // WillPopScope controla el botón de 'atrás' en Android, es usado con global
     // keys para controlar cada pila de navegación
     return WillPopScope(
-      onWillPop: () async =>
-          !await navigatorKeys[_currentTab]!.currentState!.maybePop(),
+      onWillPop: () async => !await navigatorKeys[_currentTab]!.currentState!.maybePop(),
       child: CupertinoHomeScaffold(
         currentTab: _currentTab,
         onSelectTab: _select,
