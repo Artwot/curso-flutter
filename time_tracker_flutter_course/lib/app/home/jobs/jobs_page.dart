@@ -1,15 +1,15 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../common_widgets/show_alert_dialog.dart';
-import '../../../common_widgets/show_exception_alert_dialog.dart';
-import '../../services/auth.dart';
-import '../../services/database.dart';
+import '/app/home/jobs/edit_job_page.dart';
+import '/app/home/jobs/job_list_tile.dart';
+import '/app/home/jobs/list_items_builder.dart';
+import '/app/home/models/job.dart';
+import '/app/services/auth.dart';
+import '/app/services/database.dart';
+import '/common_widgets/show_alert_dialog.dart';
+import '/common_widgets/show_exception_alert_dialog.dart';
 import '../job_entries/job_entries_page.dart';
-import '../models/job.dart';
-import 'edit_job_page.dart';
-import 'job_list_tile.dart';
-import 'list_items_builder.dart';
 
 class JobsPage extends StatelessWidget {
   Future<void> _signOut(BuildContext context) async {
@@ -29,7 +29,6 @@ class JobsPage extends StatelessWidget {
       cancelActionText: 'Cancel',
       defaultActionText: 'Logout',
     );
-
     if (didRequestSignOut == true) _signOut(context);
   }
 
@@ -38,11 +37,8 @@ class JobsPage extends StatelessWidget {
       final database = Provider.of<Database>(context, listen: false);
       await database.deleteJob(job);
     } on FirebaseException catch (e) {
-      showExceptionAlertDialog(
-        context,
-        title: 'Operation failed',
-        exception: e,
-      );
+      showExceptionAlertDialog(context,
+          title: 'Operation failed', exception: e);
     }
   }
 
@@ -52,6 +48,16 @@ class JobsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Jobs'),
         actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
+            onPressed: () => EditJobPage.show(
+              context,
+              database: Provider.of<Database>(context, listen: false),
+            ),
+          ),
           TextButton(
             child: Text(
               'Logout',
@@ -65,13 +71,6 @@ class JobsPage extends StatelessWidget {
         ],
       ),
       body: _buildContents(context),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () => EditJobPage.show(
-          context,
-          database: Provider.of<Database>(context, listen: false),
-        ),
-      ),
     );
   }
 
