@@ -19,6 +19,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   TabItem _currentTab = TabItem.jobs;
 
+// Declarar 'navigatorKey' para acceder al estado del navigator
+  final Map<TabItem, GlobalKey<NavigatorState>> navigatorKeys = {
+    TabItem.jobs: GlobalKey<NavigatorState>(),
+    TabItem.entries: GlobalKey<NavigatorState>(),
+    TabItem.account: GlobalKey<NavigatorState>(),
+  };
+
   // Declarar los widgets para cada pestaña del BottomNavigation
   Map<TabItem, WidgetBuilder> get widgetBuilders {
     return {
@@ -30,10 +37,17 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoHomeScaffold(
-      currentTab: _currentTab,
-      onSelectTab: _select,
-      widgetBuilders: widgetBuilders,
+    // WillPopScope controla el botón de 'atrás' en Android, es usado con global
+    // keys para controlar cada pila de navegación
+    return WillPopScope(
+      onWillPop: () async =>
+          !await navigatorKeys[_currentTab]!.currentState!.maybePop(),
+      child: CupertinoHomeScaffold(
+        currentTab: _currentTab,
+        onSelectTab: _select,
+        widgetBuilders: widgetBuilders,
+        navigatorKeys: navigatorKeys,
+      ),
     );
   }
 

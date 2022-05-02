@@ -25,6 +25,7 @@ class JobsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Jobs'),
+        centerTitle: true,
         actions: <Widget>[
           IconButton(
             icon: Icon(
