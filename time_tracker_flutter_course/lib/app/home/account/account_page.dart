@@ -20,7 +20,7 @@ class AccountPage extends StatelessWidget {
     final didRequestSignOut = await showAlertDialog(
       context,
       title: 'Logout',
-      content: 'Are your sure that you want to logout?',
+      content: 'Are you sure that you want to logout?',
       cancelActionText: 'Cancel',
       defaultActionText: 'Logout',
     );
@@ -33,24 +33,25 @@ class AccountPage extends StatelessWidget {
     auth.currentUser;
     return Scaffold(
       appBar: AppBar(
-          centerTitle: true,
-          title: Text('Account'),
-          actions: <Widget>[
-            TextButton(
-              child: Text(
-                'Logout',
-                style: TextStyle(
-                  fontSize: 18.0,
-                  color: Colors.white,
-                ),
+        centerTitle: true,
+        title: Text('Account'),
+        actions: <Widget>[
+          TextButton(
+            child: Text(
+              'Logout',
+              style: TextStyle(
+                fontSize: 18.0,
+                color: Colors.white,
               ),
-              onPressed: () => _confirmSignOut(context),
-            )
-          ],
-          bottom: PreferredSize(
-            preferredSize: Size.fromHeight(130),
-            child: _buildUserInfo(auth.currentUser),
-          )),
+            ),
+            onPressed: () => _confirmSignOut(context),
+          )
+        ],
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(130),
+          child: _buildUserInfo(auth.currentUser),
+        ),
+      ),
     );
   }
 
