@@ -1,7 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../../../common_widgets/show_alert_dialog.dart';
+import '/common_widgets/avatar.dart';
+import '/common_widgets/show_alert_dialog.dart';
 import '../../services/auth.dart';
 
 class AccountPage extends StatelessWidget {
@@ -19,7 +20,7 @@ class AccountPage extends StatelessWidget {
     final didRequestSignOut = await showAlertDialog(
       context,
       title: 'Logout',
-      content: 'Are your sure that you want to logout?',
+      content: 'Are you sure that you want to logout?',
       cancelActionText: 'Cancel',
       defaultActionText: 'Logout',
     );
@@ -28,6 +29,8 @@ class AccountPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final auth = Provider.of<AuthBase>(context, listen: false);
+    auth.currentUser;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -44,7 +47,28 @@ class AccountPage extends StatelessWidget {
             onPressed: () => _confirmSignOut(context),
           )
         ],
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(130),
+          child: _buildUserInfo(auth.currentUser),
+        ),
       ),
+    );
+  }
+
+  Widget _buildUserInfo(User? user) {
+    return Column(
+      children: [
+        Avatar(
+          radius: 50.0,
+          photoUrl: user?.photoURL,
+        ),
+        SizedBox(height: 8.0),
+        if (user?.displayName != null)
+          Text(
+            (user!.displayName)!,
+            style: TextStyle(color: Colors.white),
+          )
+      ],
     );
   }
 }
