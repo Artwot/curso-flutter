@@ -1,21 +1,23 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../common_widgets/show_exception_alert_dialog.dart';
+import '/app/sign_in/email_sign_in_page.dart';
+import '/app/sign_in/sign_in_manager.dart';
+import '/app/sign_in/sign_in_button.dart';
+import '/app/sign_in/social_sign_in_button.dart';
+import '/common_widgets/show_exception_alert_dialog.dart';
 import '../services/auth.dart';
-import 'sign_in_manager.dart';
-import 'sign_in_button.dart';
-import 'email_sign_in_page.dart';
-import 'social_sign_in_button.dart';
 
 class SignInPage extends StatelessWidget {
   const SignInPage({
     Key? key,
-    required this.bloc,
+    required this.manager,
     required this.isLoading,
   }) : super(key: key);
-  final SignInManager? bloc;
+  final SignInManager? manager;
   final bool isLoading;
+
+  static const Key emailPasswordKey = Key('email-password');
 
   // Usar el método 'static create(context)' cuando se crean widgets que requieren un BLoC
   static Widget create(BuildContext context) {
@@ -28,10 +30,8 @@ class SignInPage extends StatelessWidget {
         builder: (_, isLoading, __) => Provider<SignInManager>(
           create: (_) => SignInManager(auth: auth, isLoading: isLoading),
           child: Consumer<SignInManager>(
-            builder: (_, bloc, __) => SignInPage(
-              bloc: bloc,
-              isLoading: isLoading.value,
-            ),
+            builder: (_, manager, __) =>
+                SignInPage(manager: manager, isLoading: isLoading.value),
           ),
         ),
       ),
@@ -52,9 +52,14 @@ class SignInPage extends StatelessWidget {
 
   // Inicio de sesión de forma anónima
   Future<void> _signInAnonymously(BuildContext context) async {
+    /*
+      Usamos el patrón de diseño Singleton, el cual es usado en POO con la 
+      finalidad de usar no más de una instancia de una clase. Además provee
+      acceso global a los recursos
+    */
     // Retorna un Future<UserCredencial>
     try {
-      await bloc?.signInAnonymously();
+      await manager?.signInAnonymously();
     } on Exception catch (e) {
       _showSignInError(context, e);
     }
@@ -63,7 +68,7 @@ class SignInPage extends StatelessWidget {
   // Inicio de sesión con Google
   Future<void> _signInWithGoogle(BuildContext context) async {
     try {
-      await bloc?.signInWithGoogle();
+      await manager?.signInWithGoogle();
     } on Exception catch (e) {
       _showSignInError(context, e);
     }
@@ -72,7 +77,7 @@ class SignInPage extends StatelessWidget {
   // Inicio de sesión con Facebook
   Future<void> _signInWithFacebook(BuildContext context) async {
     try {
-      await bloc?.signInWithFacebook();
+      await manager?.signInWithFacebook();
     } on Exception catch (e) {
       _showSignInError(context, e);
     }
@@ -80,7 +85,6 @@ class SignInPage extends StatelessWidget {
 
   // Inicio de sesión con Email
   void _signInWithEmail(BuildContext context) {
-    print('Click here...');
     // Para navegar entre Widgets hacemos uso del widget Navigator, el cual funciona
     // como una pila, con los métodos push y pop.
     Navigator.of(context).push(
@@ -140,6 +144,7 @@ class SignInPage extends StatelessWidget {
           SizedBox(height: 8.0),
           // Inicio de sesión con Email
           SignInButton(
+            key: emailPasswordKey,
             text: 'Sign in with email',
             textColor: Colors.white,
             color: (Colors.teal[700])!,
