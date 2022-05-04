@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'app/services/auth.dart';
 import 'app/landing_page.dart';
+import 'app/services/database.dart';
 
 // Definir el método principal de la aplicación
 Future<void> main() async {
@@ -23,7 +24,9 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.indigo,
         ),
         // Llamar a la la página de Sign In
-        home: LandingPage(),
+        home: LandingPage(
+          databaseBuilder: (uid) => FirestoreDatabase(uid: uid),
+        ),
       ),
     );
   }
