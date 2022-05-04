@@ -5,7 +5,11 @@ void main() {
   group('fromMap', () {
     test('null data', () {
       expect(
-          () => Job.fromMap(null, 'abc'), throwsA(isInstanceOf<StateError>()));
+        () => Job.fromMap(null, 'abc'),
+        throwsA(
+          isInstanceOf<StateError>(),
+        ),
+      );
     });
     test('job with all properties', () {
       final job = Job.fromMap({
@@ -17,10 +21,11 @@ void main() {
 
     test('missing name', () {
       expect(
-          () => Job.fromMap(const {
-                'ratePerHour': 10,
-              }, 'abc'),
-          throwsA(isInstanceOf<StateError>()));
+        () => Job.fromMap(const {
+          'ratePerHour': 10,
+        }, 'abc'),
+        throwsA(isInstanceOf<StateError>()),
+      );
     });
   });
 

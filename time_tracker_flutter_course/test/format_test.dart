@@ -65,8 +65,8 @@ void main() {
 
   group('dayOfWeek - IT Local', () {
     setUp(() async {
-      // Intl.defaultLocale = 'it_IT';
-      // await initializeDateFormatting('it_IT', '');
+      Intl.defaultLocale = 'it_IT';
+      await initializeDateFormatting('it_IT', '');
     });
 
     test('Monday', () {

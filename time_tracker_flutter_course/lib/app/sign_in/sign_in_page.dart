@@ -1,10 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '/app/sign_in/email_sign_in_page.dart';
-import '/app/sign_in/sign_in_manager.dart';
-import '/app/sign_in/sign_in_button.dart';
-import '/app/sign_in/social_sign_in_button.dart';
+import 'sign_in_manager.dart';
+import 'sign_in_button.dart';
+import 'email_sign_in_page.dart';
+import 'social_sign_in_button.dart';
 import '/common_widgets/show_exception_alert_dialog.dart';
 import '../services/auth.dart';
 

@@ -23,99 +23,110 @@ void main() {
         create: (_) => mockAuth,
         child: MaterialApp(
           home: Scaffold(
-              body: EmailSignInFormStateful(
-            onSignedIn: onSignedIn,
-          )),
+            body: EmailSignInFormStateful(
+              onSignedIn: onSignedIn,
+            ),
+          ),
         ),
       ),
     );
   }
 
   void stubSignInWithEmailAndPasswordSucceeds() {
-    when(mockAuth.signInWithEmailAndPassword(any, any))
-        .thenAnswer((_) => Future<User>.value(MockUser()));
+    when(mockAuth.signInWithEmailAndPassword(any, any)).thenAnswer(
+      (_) => Future<User>.value(
+        MockUser(),
+      ),
+    );
   }
 
   void stubSignInWithEmailAndPasswordThrows() {
-    when(mockAuth.signInWithEmailAndPassword(any, any))
-        .thenThrow(FirebaseAuthException(code: 'ERROR_WRONG_PASSWORD'));
+    when(mockAuth.signInWithEmailAndPassword(any, any)).thenThrow(
+      FirebaseAuthException(code: 'ERROR_WRONG_PASSWORD'),
+    );
   }
 
   group('sign in', () {
     testWidgets(
-        'WHEN user doesn\'t enter the email and password'
-        'AND user taps on the sign-in button'
-        'THEN signInWithEmailAndPassword is not called'
-        'AND user is not signed-in', (WidgetTester tester) async {
-      var signedIn = false;
-      await pumpEmailSignInForm(tester, onSignedIn: () => signedIn = true);
+      'WHEN user doesn\'t enter the email and password'
+      'AND user taps on the sign-in button'
+      'THEN signInWithEmailAndPassword is not called'
+      'AND user is not signed-in',
+      (WidgetTester tester) async {
+        var signedIn = false;
+        await pumpEmailSignInForm(tester, onSignedIn: () => signedIn = true);
 
-      final signInButton = find.text('Sign in');
-      await tester.tap(signInButton);
+        final signInButton = find.text('Sign in');
+        await tester.tap(signInButton);
 
-      verifyNever(mockAuth.signInWithEmailAndPassword(any, any));
-      expect(signedIn, false);
-    });
-
-    testWidgets(
-        'WHEN user enters a valid email and password'
-        'AND user taps on the sign-in button'
-        'THEN signInWithEmailAndPassword is called'
-        'AND user is signed in', (WidgetTester tester) async {
-      var signedIn = false;
-      await pumpEmailSignInForm(tester, onSignedIn: () => signedIn = true);
-
-      stubSignInWithEmailAndPasswordSucceeds();
-
-      const email = 'email@email.com';
-      const password = 'password';
-
-      final emailField = find.byKey(Key('email'));
-      expect(emailField, findsOneWidget);
-      await tester.enterText(emailField, email);
-
-      final passwordField = find.byKey(Key('password'));
-      expect(passwordField, findsOneWidget);
-      await tester.enterText(passwordField, password);
-
-      await tester.pump();
-
-      final signInButton = find.text('Sign in');
-      await tester.tap(signInButton);
-
-      verify(mockAuth.signInWithEmailAndPassword(email, password)).called(1);
-      expect(signedIn, true);
-    });
+        verifyNever(mockAuth.signInWithEmailAndPassword(any, any));
+        expect(signedIn, false);
+      },
+    );
 
     testWidgets(
-        'WHEN user enters an invalid email and password'
-        'AND user taps on the sign-in button'
-        'THEN signInWithEmailAndPassword is called'
-        'AND user is not signed in', (WidgetTester tester) async {
-      var signedIn = false;
-      await pumpEmailSignInForm(tester, onSignedIn: () => signedIn = true);
+      'WHEN user enters a valid email and password'
+      'AND user taps on the sign-in button'
+      'THEN signInWithEmailAndPassword is called'
+      'AND user is signed in',
+      (WidgetTester tester) async {
+        var signedIn = false;
+        await pumpEmailSignInForm(tester, onSignedIn: () => signedIn = true);
 
-      stubSignInWithEmailAndPasswordThrows();
+        stubSignInWithEmailAndPasswordSucceeds();
 
-      const email = 'email@email.com';
-      const password = 'password';
+        const email = 'email@email.com';
+        const password = 'password';
 
-      final emailField = find.byKey(Key('email'));
-      expect(emailField, findsOneWidget);
-      await tester.enterText(emailField, email);
+        final emailField = find.byKey(Key('email'));
+        expect(emailField, findsOneWidget);
+        await tester.enterText(emailField, email);
 
-      final passwordField = find.byKey(Key('password'));
-      expect(passwordField, findsOneWidget);
-      await tester.enterText(passwordField, password);
+        final passwordField = find.byKey(Key('password'));
+        expect(passwordField, findsOneWidget);
+        await tester.enterText(passwordField, password);
 
-      await tester.pump();
+        await tester.pump();
 
-      final signInButton = find.text('Sign in');
-      await tester.tap(signInButton);
+        final signInButton = find.text('Sign in');
+        await tester.tap(signInButton);
 
-      verify(mockAuth.signInWithEmailAndPassword(email, password)).called(1);
-      expect(signedIn, false);
-    });
+        verify(mockAuth.signInWithEmailAndPassword(email, password)).called(1);
+        expect(signedIn, true);
+      },
+    );
+
+    testWidgets(
+      'WHEN user enters an invalid email and password'
+      'AND user taps on the sign-in button'
+      'THEN signInWithEmailAndPassword is called'
+      'AND user is not signed in',
+      (WidgetTester tester) async {
+        var signedIn = false;
+        await pumpEmailSignInForm(tester, onSignedIn: () => signedIn = true);
+
+        stubSignInWithEmailAndPasswordThrows();
+
+        const email = 'email@email.com';
+        const password = 'password';
+
+        final emailField = find.byKey(Key('email'));
+        expect(emailField, findsOneWidget);
+        await tester.enterText(emailField, email);
+
+        final passwordField = find.byKey(Key('password'));
+        expect(passwordField, findsOneWidget);
+        await tester.enterText(passwordField, password);
+
+        await tester.pump();
+
+        final signInButton = find.text('Sign in');
+        await tester.tap(signInButton);
+
+        verify(mockAuth.signInWithEmailAndPassword(email, password)).called(1);
+        expect(signedIn, false);
+      },
+    );
   });
 
   group('register', () {

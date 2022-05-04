@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
 import 'package:provider/provider.dart';
-import 'package:time_tracker_flutter_course/app/sign_in/sign_in_page.dart';
+import '../lib/app/sign_in/sign_in_page.dart';
 import '../lib/app/services/auth.dart';
 
 import 'sign_in_page_test.mocks.dart';
