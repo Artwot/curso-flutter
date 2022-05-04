@@ -1,14 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../common_widgets/form_submit_button.dart';
 import '../../common_widgets/show_exception_alert_dialog.dart';
 import '../services/auth.dart';
-import '/app/sign_in/validators.dart';
-import '/common_widgets/form_submit_button.dart';
 import 'email_sign_in_model.dart';
+import 'validators.dart';
 
 class EmailSignInFormStateful extends StatefulWidget
     with EmailAndPasswordValidator {
+  final VoidCallback? onSignedIn;
+  EmailSignInFormStateful({this.onSignedIn});
   @override
   State<EmailSignInFormStateful> createState() =>
       _EmailSignInFormStatefulState();
@@ -20,18 +22,16 @@ class _EmailSignInFormStatefulState extends State<EmailSignInFormStateful> {
   final TextEditingController _passwordController = TextEditingController();
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
-
   EmailSignInFormType _formType = EmailSignInFormType.signIn;
-
   // Obtener los controllers de los campos del formulario
   String get _email => _emailController.text;
   String get _password => _passwordController.text;
-
   bool _submitted = false;
   bool _isLoading = false;
 
   // El método dispose() es definido en el State de la clase.
-  // Es invocado cuando un 'widget' es removido del 'widget tree'
+  // Es invocado cuando un 'widget' es removido del árbol de Widgets junto con
+  // los objetos de la clase
   @override
   void dispose() {
     _emailController.dispose();
@@ -53,6 +53,9 @@ class _EmailSignInFormStatefulState extends State<EmailSignInFormStateful> {
         await auth.signInWithEmailAndPassword(_email, _password);
       } else {
         await auth.createUserWithEmailAndPassword(_email, _password);
+      }
+      if (widget.onSignedIn != null) {
+        widget.onSignedIn!();
       }
       Navigator.of(context).pop();
     } on FirebaseAuthException catch (e) {

@@ -1,4 +1,5 @@
-import '/app/sign_in/validators.dart';
+import 'dart:ui';
+import 'validators.dart';
 
 enum EmailSignInFormType { signIn, register }
 
@@ -63,4 +64,24 @@ class EmailSignInModel with EmailAndPasswordValidator {
       submitted: submitted ?? this.submitted,
     );
   }
+
+  @override
+  int get hashCode =>
+      hashValues(email, password, formType, isLoading, submitted);
+
+  @override
+  bool operator ==(other) {
+    if (identical(this, other)) return true;
+    if (runtimeType != other.runtimeType) return false;
+    final otherModel = other as EmailSignInModel;
+    return email == otherModel.email &&
+        password == otherModel.password &&
+        formType == otherModel.formType &&
+        isLoading == otherModel.isLoading &&
+        submitted == otherModel.submitted;
+  }
+
+  @override
+  String toString() =>
+      'email: $email, password: $password, formType: $formType, isLoading: $isLoading, submitted: $submitted';
 }
